@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DDHC SLESpro · 工作台總覽 / Workspace Hub</title>
+<style>
+  :root{
+    --ink:#0f172a; --mut:#64748b; --line:#e2e8f0; --pri:#0284c7; --pri2:#0369a1;
+    --bg:#f1f5f9; --card:#ffffff; --good:#16a34a; --warn:#d97706;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; font-family:"Microsoft JhengHei","PingFang TC","Segoe UI",system-ui,sans-serif;
+    color:var(--ink); background:linear-gradient(180deg,#e0f2fe 0%,var(--bg) 240px);
+    line-height:1.6; padding:32px 18px 64px;
+  }
+  .wrap{ max-width:1000px; margin:0 auto; }
+  header{ text-align:center; margin-bottom:28px; }
+  header .logo{
+    display:inline-flex; align-items:center; gap:10px; font-weight:800; font-size:14px;
+    color:#fff; background:var(--pri); padding:6px 14px; border-radius:999px; letter-spacing:.5px;
+  }
+  header h1{ font-size:30px; margin:16px 0 6px; }
+  header p{ color:var(--mut); margin:0; font-size:15px; }
+  .grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:16px; padding:20px;
+    box-shadow:0 6px 20px rgba(2,132,199,.06); transition:transform .15s, box-shadow .15s;
+    display:flex; flex-direction:column;
+  }
+  .card:hover{ transform:translateY(-3px); box-shadow:0 12px 28px rgba(2,132,199,.14); }
+  .card .ic{
+    width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+    font-size:22px; margin-bottom:12px; color:#fff;
+  }
+  .c1 .ic{ background:#0284c7; } .c2 .ic{ background:#7c3aed; }
+  .c3 .ic{ background:#16a34a; } .c4 .ic{ background:#d97706; }
+  .card h2{ font-size:18px; margin:0 0 4px; }
+  .card .en{ color:var(--mut); font-size:12px; margin:0 0 10px; }
+  .card p{ font-size:13.5px; color:#334155; margin:0 0 16px; flex:1; }
+  .card a.btn{
+    text-decoration:none; text-align:center; background:var(--pri); color:#fff; font-weight:700;
+    padding:11px 14px; border-radius:10px; font-size:14px; transition:background .15s;
+  }
+  .card a.btn:hover{ background:var(--pri2); }
+  .note{ margin-top:14px; font-size:12px; color:var(--mut); }
+  section.flow{
+    margin-top:30px; background:var(--card); border:1px solid var(--line); border-radius:16px;
+    padding:22px 24px; box-shadow:0 6px 20px rgba(2,132,199,.06);
+  }
+  section.flow h2{ font-size:20px; margin:0 0 14px; border-left:4px solid var(--pri); padding-left:10px; }
+  .steps{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+  .step{ background:#f8fafc; border:1px solid var(--line); border-radius:12px; padding:14px; }
+  .step .n{ font-weight:800; color:var(--pri); font-size:13px; }
+  .step p{ font-size:12.5px; color:#334155; margin:6px 0 0; }
+  .flow .legend{ margin-top:16px; font-size:13px; color:#334155; }
+  .flow code{ background:#eef2ff; color:#3730a3; padding:1px 6px; border-radius:5px; font-family:Consolas,monospace; font-size:12px; }
+  .warnbox{ margin-top:14px; background:#fffbeb; border:1px solid #fcd34d; border-radius:10px; padding:12px 14px; font-size:12.5px; color:#92400e; }
+  footer{ margin-top:34px; text-align:center; color:var(--mut); font-size:12px; }
+  @media (max-width:720px){
+    .grid{ grid-template-columns:1fr; }
+    .steps{ grid-template-columns:1fr; }
+    header h1{ font-size:24px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <span class="logo">DDHC · SLESpro</span>
+    <h1>DDHC SLESpro 工作台總覽</h1>
+    <p>家傭配對 · 招聘問卷 · CRM 系統 — 一站式入口</p>
+  </header>
+
+  <div class="grid">
+    <div class="card c1">
+      <div class="ic">📝</div>
+      <h2>候選人問卷</h2>
+      <p class="en">Candidate Questionnaire</p>
+      <p>外傭（菲傭 / 印傭）填寫的 8 步（含相片上傳）資料問卷。提交後會自動產生「匯入碼」並嘗試開啟 CRM，把資料帶入對應國籍的「新增工人」表單。</p>
+      <a class="btn" href="candidate_question.html">打開問卷 →</a>
+      <div class="note">檔案：candidate_question.html</div>
+    </div>
+
+    <div class="card c2">
+      <div class="ic">🏠</div>
+      <h2>僱主問卷</h2>
+      <p class="en">Employer Requirements Questionnaire</p>
+      <p>僱主填寫的 8 步招聘需求問卷（家庭背景、居住環境、工作內容、國籍偏好等），用於智能配對。</p>
+      <a class="btn" href="employer%20question%20.html">打開問卷 →</a>
+      <div class="note">檔案：employer question .html</div>
+    </div>
+
+    <div class="card c3">
+      <div class="ic">💾</div>
+      <h2>CRM 系統 V2.5</h2>
+      <p class="en">DDHC SLESpro CRM V2.5</p>
+      <p>菲傭庫 / 印傭庫 / 僱主庫 / 黑名單、智能配對引擎、每日跟進、WhatsApp 對答、備份與 CSV 匯入匯出。已新增「Import Candidate」按鈕接收候選問卷資料。</p>
+      <a class="btn" href="ddhc salespro crm v2.5.html">打開 CRM →</a>
+      <div class="note">檔案：ddhc salespro crm v2.5.html</div>
+      <div class="note">＋ crm-data.js（字典／對照表／知識庫，必須同放一個資料夾）</div>
+      <div class="note">＋ crm-auth.js（會員登入系統，必須同放一個資料夾）</div>
+    </div>
+
+    <div class="card c4">
+      <div class="ic">📘</div>
+      <h2>CRM 操作手冊</h2>
+      <p class="en">CRM System Manual</p>
+      <p>Ka Shing CRM 系統手冊（員工操作 + AI 技術文件），含架構、Schema、修改守則與災難復原程序。</p>
+      <a class="btn" href="ddhc salespro manual.html">打開手冊 →</a>
+      <div class="note">檔案：ddhc salespro manual.html</div>
+    </div>
+  </div>
+
+  <section class="flow">
+    <h2>資料流向：候選人問卷 → CRM</h2>
+    <div class="steps">
+      <div class="step"><div class="n">① 填寫</div><p>候選人在 candidate_question.html 填寫 7 步問卷並選擇國籍（Filipino / Indonesian）。</p></div>
+      <div class="step"><div class="n">② 產生匯入碼</div><p>提交後系統把答案編碼成「匯入碼」，同時存入瀏覽器 localStorage。</p></div>
+      <div class="step"><div class="n">③ 自動帶入</div><p>自動開啟 CRM（URL 帶 <code>#cand=</code>），登入後跳到對應國籍分頁並預填「新增工人」表單。</p></div>
+      <div class="step"><div class="n">④ 核對儲存</div><p>員工核對預填資料（與系統「人手核對」原則一致），補齊 HKID/護照後儲存。</p></div>
+    </div>
+    <p class="legend">若瀏覽器封鎖彈出視窗：在問卷成功頁點 <b>「Copy import code」</b>，再到 CRM 菲傭 / 印傭分頁點 <b>「Import Candidate」</b> 貼上匯入碼即可。</p>
+    <div class="warnbox">⚠ 提醒：所有檔案均為本機 HTML（localStorage 儲存、離線可用）。匯入碼僅含問卷答案，不含敏感資料；正式資料請定期在 CRM 點「匯出 JSON」備份。多裝置間請以 JSON 備份檔同步，勿依賴 localStorage。</div>
+  </section>
+
+  <footer>DDHC SLESpro · Workspace Hub · 本頁為本地導覽，不連接任何外部伺服器。</footer>
+</div>
+</body>
+</html>

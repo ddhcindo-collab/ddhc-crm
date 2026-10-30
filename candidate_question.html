@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAO - Candidate Questionnaire</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#075985',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .form-section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .form-section.active {
+            display: block;
+            opacity: 1;
+        }
+        /* Custom styled radio & checkbox buttons for modern look */
+        .custom-radio:checked + label {
+            border-color: #0284c7;
+            background-color: #f0f9ff;
+            color: #0369a1;
+        }
+        .custom-checkbox:checked + label {
+            border-color: #0284c7;
+            background-color: #f0f9ff;
+            color: #0369a1;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen py-6 px-4 sm:px-6 lg:px-8 flex flex-col justify-center items-center">
+
+    <!-- Main Container -->
+    <div class="w-full max-w-[850px] bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200 my-auto">
+        
+        <!-- Header -->
+        <header class="bg-slate-900 text-white p-6 sm:p-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+                <div class="flex items-center space-x-3">
+                    <div class="bg-brand-500 text-white p-2 rounded-lg font-bold text-lg">DAO</div>
+                    <h1 class="text-xl sm:text-2xl font-bold tracking-tight" id="headerTitle">DAO</h1>
+                </div>
+                <p class="text-slate-400 text-xs sm:text-sm mt-1" id="headerSubtitle">Professional Recruitment Services</p>
+            </div>
+            
+            <!-- Language Switcher -->
+            <button type="button" id="langToggleBtn" onclick="toggleLanguage()" class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-brand-100 border border-slate-700 px-4 py-2 rounded-xl text-sm font-medium transition duration-200">
+                <i class="fa-solid fa-globe text-brand-500"></i>
+                <span id="langBtnText">🇮🇩 Bahasa Indonesia</span>
+            </button>
+        </header>
+
+        <!-- Progress Bar & Step Tracker Section -->
+        <div class="bg-slate-50 px-6 py-4 border-b border-slate-200">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-xs font-semibold uppercase tracking-wider text-slate-500" id="stepCounterLabel">Step 1 of 8</span>
+                <span class="text-xs font-bold text-brand-600 bg-brand-50 px-2.5 py-1 rounded-full border border-brand-100" id="progressPercentage">14% Completed</span>
+                <span class="text-xs font-semibold text-amber-600" id="fillPercentage">Filled: 0%</span>
+            </div>
+            
+            <!-- Visual Progress Bar -->
+            <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden p-0.5">
+                <div id="progressBar" class="bg-gradient-to-r from-brand-500 to-brand-600 h-2 rounded-full transition-all duration-500 ease-out" style="width: 12.5%;"></div>
+            </div>
+
+            <!-- Steps Badge Menu (Scrollable on mobile) -->
+            <div class="flex items-center gap-2 mt-4 overflow-x-auto pb-1 text-xs font-semibold text-slate-500 whitespace-nowrap scrollbar-none" id="stepBadges">
+                <span class="step-badge px-3 py-1.5 rounded-lg bg-brand-500 text-white transition-all duration-200" data-step="1">1</span>
+                <span class="step-badge px-3 py-1.5 rounded-lg bg-slate-200 text-slate-600 transition-all duration-200" data-step="2">2</span>
+                <span class="step-badge px-3 py-1.5 rounded-lg bg-slate-200 text-slate-600 transition-all duration-200" data-step="3">3</span>
+                <span class="step-badge px-3 py-1.5 rounded-lg bg-slate-200 text-slate-600 transition-all duration-200" data-step="4">4</span>
+                <span class="step-badge px-3 py-1.5 rounded-lg bg-slate-200 text-slate-600 transition-all duration-200" data-step="5">5</span>
+                <span class="step-badge px-3 py-1.5 rounded-lg bg-slate-200 text-slate-600 transition-all duration-200" data-step="6">6</span>
+                <span class="step-badge px-3 py-1.5 rounded-lg bg-slate-200 text-slate-600 transition-all duration-200" data-step="7">7</span>
+                <span class="step-badge px-3 py-1.5 rounded-lg bg-slate-200 text-slate-600 transition-all duration-200" data-step="8">8</span>
+            </div>
+        </div>
+
+        <!-- Form Body -->
+        <form id="questionnaireForm" onsubmit="handleFormSubmit(event)" novalidate class="p-6 sm:p-8">
+
+            <!-- STEP 1: My Name (New Section) -->
+            <div class="form-section active" id="section1">
+                <div class="bg-brand-50 border-l-4 border-brand-500 p-4 rounded-r-xl mb-6">
+                    <div class="flex items-start gap-3">
+                        <i class="fa-solid fa-hand-wave text-brand-600 text-xl mt-0.5"></i>
+                        <div>
+                            <h3 class="font-bold text-slate-900 text-sm sm:text-base" id="greetingTitle">Welcome to DAO Recruitment!</h3>
+                            <p class="text-xs sm:text-sm text-slate-600 mt-1" id="greetingMsg">Welcome! Please enter your basic name details to begin your recruitment application.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-b border-slate-200 pb-3 mb-6">
+                    <h2 class="text-lg font-bold text-slate-900" id="sec1Title">1. My Name</h2>
+                    <p class="text-xs text-slate-500 mt-1" id="sec1Sub">Please tell us your full name and nationality.</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <!-- Full Name (Required) -->
+                    <div class="sm:col-span-2">
+                        <label class="block text-sm font-semibold text-slate-700 mb-1" id="lblFullName">Full Name <span class="text-red-500">*</span></label>
+                        <input type="text" id="fullName" name="fullName" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition" placeholder="e.g. Maria Santos / Siti Rahayu" required>
+                        <p class="text-red-500 text-xs mt-1 hidden" id="errFullName">Full Name is required.</p>
+                    </div>
+
+                    <!-- Nickname -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1" id="lblNickname">Nickname</label>
+                        <input type="text" id="nickname" name="nickname" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition" placeholder="e.g. Maria / Siti">
+                    </div>
+
+                    <!-- Nationality -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1" id="lblNationality">Nationality</label>
+                        <select id="nationality" name="nationality" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition bg-white">
+                            <option value="" id="optSelectNat">Select nationality</option>
+                            <option value="Indonesian" id="optIndo">Indonesian</option>
+                            <option value="Filipino" id="optPh">Filipino</option>
+                            <option value="Other" id="optOther">Other</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 2: Personal Information -->
+            <div class="form-section" id="section2">
+                <div class="border-b border-slate-200 pb-3 mb-6">
+                    <h2 class="text-lg font-bold text-slate-900" id="sec2Title">2. Personal Information</h2>
+                    <p class="text-xs text-slate-500 mt-1" id="sec2Sub">Please enter your background details.</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <!-- Date of Birth -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1" id="lblDob">Date of Birth</label>
+                        <input type="date" id="dob" name="dob" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition">
+                    </div>
+
+                    <!-- Marital Status -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1" id="lblMarital">Marital Status</label>
+                        <select id="maritalStatus" name="maritalStatus" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition bg-white">
+                            <option value="" id="optSelectMar">Select status</option>
+                            <option value="Single" id="optSingle">Single</option>
+                            <option value="Married" id="optMarried">Married</option>
+                            <option value="Divorced" id="optDivorced">Divorced</option>
+                            <option value="Widowed" id="optWidowed">Widowed</option>
+                        </select>
+                    </div>
+
+                    <!-- Number of Children -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1" id="lblChildren">Number of Children</label>
+                        <input type="number" id="childrenCount" name="childrenCount" min="0" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition" placeholder="0">
+                        <p class="text-red-500 text-xs mt-1 hidden" id="errChildrenCount">Number of children cannot be negative.</p>
+                    </div>
+
+                    <!-- Education Level -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1" id="lblEdu">Education Level</label>
+                        <select id="educationLevel" name="educationLevel" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition bg-white">
+                            <option value="" id="optSelectEdu">Select education level</option>
+                            <option value="Elementary" id="optEduElem">Elementary School</option>
+                            <option value="High School" id="optEduHigh">High School</option>
+                            <option value="College" id="optEduColl">College / University</option>
+                            <option value="Others" id="optEduOther">Others</option>
+                        </select>
+                    </div>
+
+                    <!-- Religion -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1" id="lblReligion">Religion</label>
+                        <select id="religion" name="religion" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition bg-white">
+                            <option value="" id="optSelectRel">Select religion</option>
+                            <option value="Christian" id="optRelChristian">Christian</option>
+                            <option value="Catholic" id="optRelCatholic">Catholic</option>
+                            <option value="Muslim" id="optRelMuslim">Muslim</option>
+                            <option value="Buddhist" id="optRelBuddhist">Buddhist</option>
+                            <option value="Other" id="optRelOther">Other</option>
+                        </select>
+                    </div>
+
+                    <!-- Height -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1" id="lblHeight">Height (cm)</label>
+                        <input type="number" id="height" name="height" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition" placeholder="e.g. 158">
+                    </div>
+
+                    <!-- Weight -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1" id="lblWeight">Weight (kg)</label>
+                        <input type="number" id="weight" name="weight" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition" placeholder="e.g. 52">
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3: Contact Details & Identification -->
+            <div class="form-section" id="section3">
+                <div class="border-b border-slate-200 pb-3 mb-6">
+                    <h2 class="text-lg font-bold text-slate-900" id="sec3Title">3. Contact Details & Identification</h2>
+                    <p class="text-xs text-slate-500 mt-1" id="sec3Sub">Please provide your HKID/Passport and at least ONE contact method.</p>
+                </div>
+
+                <!-- Alert box for contact validation rule -->
+                <div class="bg-amber-50 border-l-4 border-amber-400 p-3.5 rounded-r-lg mb-5 text-amber-800 text-xs sm:text-sm" id="contactNotice">
+                    <i class="fa-solid fa-circle-info mr-1.5"></i>
+                    <span id="contactNoticeText">At least ONE contact field (WhatsApp, Email, or Facebook) is required.</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <!-- HKID -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1" id="lblHkid">HKID No.</label>
+                        <input type="text" id="hkid" name="hkid" inputmode="numeric" pattern="\d{6,7}" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition" placeholder="6–7 digits, e.g. 1234567">
+                        <p class="text-red-500 text-xs mt-1 hidden" id="errHkid">HKID must be 6–7 digits, numbers only.</p>
+                    </div>
+
+                    <!-- Passport -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1" id="lblPassport">Passport No.</label>
+                        <input type="text" id="passport" name="passport" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition" placeholder="Passport No.">
+                        <p class="text-red-500 text-xs mt-1 hidden" id="errPassport">Passport must be 6–12 letters/numbers.</p>
+                    </div>
+
+                    <!-- HK WhatsApp -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1" id="lblHkWa">HK WhatsApp Number</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400"><i class="fa-brands fa-whatsapp text-green-500"></i></span>
+                            <input type="text" id="hkWhatsapp" name="hkWhatsapp" class="contact-input w-full pl-9 pr-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition" placeholder="+852 XXXX XXXX">
+                        </div>
+                    </div>
+
+                    <!-- Indonesia WhatsApp -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1" id="lblIndoWa">Indonesia WhatsApp</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400"><i class="fa-brands fa-whatsapp text-green-500"></i></span>
+                            <input type="text" id="indoWhatsapp" name="indoWhatsapp" class="contact-input w-full pl-9 pr-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition" placeholder="+62 XXXX XXXX">
+                        </div>
+                    </div>
+
+                    <!-- Filipino WhatsApp -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1" id="lblPhWa">Filipino WhatsApp</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400"><i class="fa-brands fa-whatsapp text-green-500"></i></span>
+                            <input type="text" id="phWhatsapp" name="phWhatsapp" class="contact-input w-full pl-9 pr-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition" placeholder="+63 XXXX XXXX">
+                        </div>
+                    </div>
+
+                    <!-- Email Address -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1" id="lblEmail">Email Address</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400"><i class="fa-regular fa-envelope"></i></span>
+                            <input type="email" id="email" name="email" class="contact-input w-full pl-9 pr-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition" placeholder="name@example.com">
+                        </div>
+                        <p class="text-red-500 text-xs mt-1 hidden" id="errEmail">Please enter a valid email address.</p>
+                    </div>
+
+                    <!-- Facebook Account -->
+                    <div class="sm:col-span-2">
+                        <label class="block text-sm font-semibold text-slate-700 mb-1" id="lblFacebook">Facebook Account</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400"><i class="fa-brands fa-facebook text-blue-600"></i></span>
+                            <input type="text" id="facebook" name="facebook" class="contact-input w-full pl-9 pr-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition" placeholder="Profile Link / Name in Facebook">
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-red-500 text-xs mt-3 hidden" id="errContact">Please fill in at least ONE contact option above.</p>
+            </div>
+
+            <!-- STEP 4: Language Proficiency & Experience -->
+            <div class="form-section" id="section4">
+                <div class="border-b border-slate-200 pb-3 mb-6">
+                    <h2 class="text-lg font-bold text-slate-900" id="sec4Title">4. Language Proficiency & Total Experience</h2>
+                    <p class="text-xs text-slate-500 mt-1" id="sec4Sub">Rate your speaking level for each language.</p>
+                </div>
+
+                <!-- Language Table Matrix -->
+                <div class="overflow-x-auto rounded-xl border border-slate-200 mb-6">
+                    <table class="w-full text-sm text-left text-slate-700">
+                        <thead class="text-xs uppercase bg-slate-100 text-slate-600 border-b border-slate-200">
+                            <tr>
+                                <th scope="col" class="py-3.5 px-4 font-bold" id="thLang">Language</th>
+                                <th scope="col" class="py-3.5 px-2 text-center font-bold" id="thNative">Native</th>
+                                <th scope="col" class="py-3.5 px-2 text-center font-bold" id="thVeryGood">Very Good</th>
+                                <th scope="col" class="py-3.5 px-2 text-center font-bold" id="thFair">Fair</th>
+                                <th scope="col" class="py-3.5 px-2 text-center font-bold" id="thNone">None</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 bg-white">
+                            <!-- English -->
+                            <tr class="hover:bg-slate-50">
+                                <td class="py-3 px-4 font-semibold text-slate-900" id="rowEnglish">English</td>
+                                <td class="py-3 px-2 text-center"><input type="radio" name="lang_english" value="Native" class="w-4 h-4 text-brand-600 focus:ring-brand-500"></td>
+                                <td class="py-3 px-2 text-center"><input type="radio" name="lang_english" value="Very Good" class="w-4 h-4 text-brand-600 focus:ring-brand-500"></td>
+                                <td class="py-3 px-2 text-center"><input type="radio" name="lang_english" value="Fair" class="w-4 h-4 text-brand-600 focus:ring-brand-500" checked></td>
+                                <td class="py-3 px-2 text-center"><input type="radio" name="lang_english" value="None" class="w-4 h-4 text-brand-600 focus:ring-brand-500"></td>
+                            </tr>
+                            <!-- Cantonese -->
+                            <tr class="hover:bg-slate-50">
+                                <td class="py-3 px-4 font-semibold text-slate-900" id="rowCantonese">Cantonese</td>
+                                <td class="py-3 px-2 text-center"><input type="radio" name="lang_cantonese" value="Native" class="w-4 h-4 text-brand-600 focus:ring-brand-500"></td>
+                                <td class="py-3 px-2 text-center"><input type="radio" name="lang_cantonese" value="Very Good" class="w-4 h-4 text-brand-600 focus:ring-brand-500"></td>
+                                <td class="py-3 px-2 text-center"><input type="radio" name="lang_cantonese" value="Fair" class="w-4 h-4 text-brand-600 focus:ring-brand-500" checked></td>
+                                <td class="py-3 px-2 text-center"><input type="radio" name="lang_cantonese" value="None" class="w-4 h-4 text-brand-600 focus:ring-brand-500"></td>
+                            </tr>
+                            <!-- Mandarin -->
+                            <tr class="hover:bg-slate-50">
+                                <td class="py-3 px-4 font-semibold text-slate-900" id="rowMandarin">Mandarin</td>
+                                <td class="py-3 px-2 text-center"><input type="radio" name="lang_mandarin" value="Native" class="w-4 h-4 text-brand-600 focus:ring-brand-500"></td>
+                                <td class="py-3 px-2 text-center"><input type="radio" name="lang_mandarin" value="Very Good" class="w-4 h-4 text-brand-600 focus:ring-brand-500"></td>
+                                <td class="py-3 px-2 text-center"><input type="radio" name="lang_mandarin" value="Fair" class="w-4 h-4 text-brand-600 focus:ring-brand-500"></td>
+                                <td class="py-3 px-2 text-center"><input type="radio" name="lang_mandarin" value="None" class="w-4 h-4 text-brand-600 focus:ring-brand-500" checked></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1" id="lblYearsExp">Total Years of Experience</label>
+                        <input type="number" id="yearsExp" name="yearsExp" min="0" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition" placeholder="e.g. 4">
+                        <p class="text-red-500 text-xs mt-1 hidden" id="errYearsExp">Years of experience cannot be negative.</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1" id="lblContracts">No. of Contracts Completed</label>
+                        <input type="number" id="contractsCompleted" name="contractsCompleted" min="0" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition" placeholder="e.g. 2">
+                        <p class="text-red-500 text-xs mt-1 hidden" id="errContractsCompleted">Number of contracts cannot be negative.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 5: My Best Interest (Single Choice) -->
+            <div class="form-section" id="section5">
+                <div class="border-b border-slate-200 pb-3 mb-6">
+                    <h2 class="text-lg font-bold text-slate-900" id="sec5Title">5. My Best Interest</h2>
+                    <p class="text-xs text-slate-500 mt-1" id="sec5Sub">Please select ONE primary skill/duty you are best at.</p>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="relative">
+                        <input type="radio" id="bi1" name="bestInterest" value="Take care Baby" class="custom-radio hidden peer" checked>
+                        <label for="bi1" class="flex items-center p-4 border border-slate-200 rounded-xl cursor-pointer hover:border-brand-400 peer-checked:border-brand-500 peer-checked:bg-brand-50 text-slate-700 font-medium text-sm transition">
+                            <i class="fa-solid fa-baby text-lg text-brand-500 mr-3 w-5 text-center"></i>
+                            <span id="biText1">Take care Baby</span>
+                        </label>
+                    </div>
+
+                    <div class="relative">
+                        <input type="radio" id="bi2" name="bestInterest" value="Take care children" class="custom-radio hidden peer">
+                        <label for="bi2" class="flex items-center p-4 border border-slate-200 rounded-xl cursor-pointer hover:border-brand-400 peer-checked:border-brand-500 peer-checked:bg-brand-50 text-slate-700 font-medium text-sm transition">
+                            <i class="fa-solid fa-child text-lg text-brand-500 mr-3 w-5 text-center"></i>
+                            <span id="biText2">Take care children</span>
+                        </label>
+                    </div>
+
+                    <div class="relative">
+                        <input type="radio" id="bi3" name="bestInterest" value="Take care elderly" class="custom-radio hidden peer">
+                        <label for="bi3" class="flex items-center p-4 border border-slate-200 rounded-xl cursor-pointer hover:border-brand-400 peer-checked:border-brand-500 peer-checked:bg-brand-50 text-slate-700 font-medium text-sm transition">
+                            <i class="fa-solid fa-wheelchair text-lg text-brand-500 mr-3 w-5 text-center"></i>
+                            <span id="biText3">Take care elderly</span>
+                        </label>
+                    </div>
+
+                    <div class="relative">
+                        <input type="radio" id="bi4" name="bestInterest" value="Cleaning house and washing clothes" class="custom-radio hidden peer">
+                        <label for="bi4" class="flex items-center p-4 border border-slate-200 rounded-xl cursor-pointer hover:border-brand-400 peer-checked:border-brand-500 peer-checked:bg-brand-50 text-slate-700 font-medium text-sm transition">
+                            <i class="fa-solid fa-broom text-lg text-brand-500 mr-3 w-5 text-center"></i>
+                            <span id="biText4">Cleaning house and washing clothes</span>
+                        </label>
+                    </div>
+
+                    <div class="relative">
+                        <input type="radio" id="bi5" name="bestInterest" value="Cooking" class="custom-radio hidden peer">
+                        <label for="bi5" class="flex items-center p-4 border border-slate-200 rounded-xl cursor-pointer hover:border-brand-400 peer-checked:border-brand-500 peer-checked:bg-brand-50 text-slate-700 font-medium text-sm transition">
+                            <i class="fa-solid fa-utensils text-lg text-brand-500 mr-3 w-5 text-center"></i>
+                            <span id="biText5">Cooking</span>
+                        </label>
+                    </div>
+
+                    <div class="relative">
+                        <input type="radio" id="bi6" name="bestInterest" value="Multi-tasking" class="custom-radio hidden peer">
+                        <label for="bi6" class="flex items-center p-4 border border-slate-200 rounded-xl cursor-pointer hover:border-brand-400 peer-checked:border-brand-500 peer-checked:bg-brand-50 text-slate-700 font-medium text-sm transition">
+                            <i class="fa-solid fa-list-check text-lg text-brand-500 mr-3 w-5 text-center"></i>
+                            <span id="biText6">Multi-tasking</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 6: My Skills and Experience (17 Grid Checkboxes) -->
+            <div class="form-section" id="section6">
+                <div class="border-b border-slate-200 pb-3 mb-6">
+                    <h2 class="text-lg font-bold text-slate-900" id="sec6Title">6. My Skills and Experience</h2>
+                    <p class="text-xs text-slate-500 mt-1" id="sec6Sub">Select all items you have experience with in previous employments.</p>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    <!-- 1 -->
+                    <div class="relative">
+                        <input type="checkbox" id="sk1" name="skills" value="No Holiday" class="custom-checkbox hidden peer">
+                        <label for="sk1" class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:border-brand-300 peer-checked:border-brand-500 peer-checked:bg-brand-50 text-xs sm:text-sm font-medium text-slate-700 transition">
+                            <span id="skText1">No Holiday</span>
+                        </label>
+                    </div>
+                    <!-- 2 -->
+                    <div class="relative">
+                        <input type="checkbox" id="sk2" name="skills" value="New Born" class="custom-checkbox hidden peer">
+                        <label for="sk2" class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:border-brand-300 peer-checked:border-brand-500 peer-checked:bg-brand-50 text-xs sm:text-sm font-medium text-slate-700 transition">
+                            <span id="skText2">New Born</span>
+                        </label>
+                    </div>
+                    <!-- 3 -->
+                    <div class="relative">
+                        <input type="checkbox" id="sk3" name="skills" value="Toddler" class="custom-checkbox hidden peer">
+                        <label for="sk3" class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:border-brand-300 peer-checked:border-brand-500 peer-checked:bg-brand-50 text-xs sm:text-sm font-medium text-slate-700 transition">
+                            <span id="skText3">Toddler</span>
+                        </label>
+                    </div>
+                    <!-- 4 -->
+                    <div class="relative">
+                        <input type="checkbox" id="sk4" name="skills" value="Elderly" class="custom-checkbox hidden peer">
+                        <label for="sk4" class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:border-brand-300 peer-checked:border-brand-500 peer-checked:bg-brand-50 text-xs sm:text-sm font-medium text-slate-700 transition">
+                            <span id="skText4">Elderly</span>
+                        </label>
+                    </div>
+                    <!-- 5 -->
+                    <div class="relative">
+                        <input type="checkbox" id="sk5" name="skills" value="Serious Illness" class="custom-checkbox hidden peer">
+                        <label for="sk5" class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:border-brand-300 peer-checked:border-brand-500 peer-checked:bg-brand-50 text-xs sm:text-sm font-medium text-slate-700 transition">
+                            <span id="skText5">Serious Illness</span>
+                        </label>
+                    </div>
+                    <!-- 6 -->
+                    <div class="relative">
+                        <input type="checkbox" id="sk6" name="skills" value="Special Child" class="custom-checkbox hidden peer">
+                        <label for="sk6" class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:border-brand-300 peer-checked:border-brand-500 peer-checked:bg-brand-50 text-xs sm:text-sm font-medium text-slate-700 transition">
+                            <span id="skText6">Special Child</span>
+                        </label>
+                    </div>
+                    <!-- 7 -->
+                    <div class="relative">
+                        <input type="checkbox" id="sk7" name="skills" value="Dog Care" class="custom-checkbox hidden peer">
+                        <label for="sk7" class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:border-brand-300 peer-checked:border-brand-500 peer-checked:bg-brand-50 text-xs sm:text-sm font-medium text-slate-700 transition">
+                            <span id="skText7">Dog Care</span>
+                        </label>
+                    </div>
+                    <!-- 8 -->
+                    <div class="relative">
+                        <input type="checkbox" id="sk8" name="skills" value="Cat Care" class="custom-checkbox hidden peer">
+                        <label for="sk8" class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:border-brand-300 peer-checked:border-brand-500 peer-checked:bg-brand-50 text-xs sm:text-sm font-medium text-slate-700 transition">
+                            <span id="skText8">Cat Care</span>
+                        </label>
+                    </div>
+                    <!-- 9 -->
+                    <div class="relative">
+                        <input type="checkbox" id="sk9" name="skills" value="Wash Car" class="custom-checkbox hidden peer">
+                        <label for="sk9" class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:border-brand-300 peer-checked:border-brand-500 peer-checked:bg-brand-50 text-xs sm:text-sm font-medium text-slate-700 transition">
+                            <span id="skText9">Wash Car</span>
+                        </label>
+                    </div>
+                    <!-- 10 -->
+                    <div class="relative">
+                        <input type="checkbox" id="sk10" name="skills" value="Driving" class="custom-checkbox hidden peer">
+                        <label for="sk10" class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:border-brand-300 peer-checked:border-brand-500 peer-checked:bg-brand-50 text-xs sm:text-sm font-medium text-slate-700 transition">
+                            <span id="skText10">Driving</span>
+                        </label>
+                    </div>
+                    <!-- 11 -->
+                    <div class="relative">
+                        <input type="checkbox" id="sk11" name="skills" value="Male Helper" class="custom-checkbox hidden peer">
+                        <label for="sk11" class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:border-brand-300 peer-checked:border-brand-500 peer-checked:bg-brand-50 text-xs sm:text-sm font-medium text-slate-700 transition">
+                            <span id="skText11">Male Helper</span>
+                        </label>
+                    </div>
+                    <!-- 12 -->
+                    <div class="relative">
+                        <input type="checkbox" id="sk12" name="skills" value="Male Employer" class="custom-checkbox hidden peer">
+                        <label for="sk12" class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:border-brand-300 peer-checked:border-brand-500 peer-checked:bg-brand-50 text-xs sm:text-sm font-medium text-slate-700 transition">
+                            <span id="skText12">Male Employer</span>
+                        </label>
+                    </div>
+                    <!-- 13 -->
+                    <div class="relative">
+                        <input type="checkbox" id="sk13" name="skills" value="No Room" class="custom-checkbox hidden peer">
+                        <label for="sk13" class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:border-brand-300 peer-checked:border-brand-500 peer-checked:bg-brand-50 text-xs sm:text-sm font-medium text-slate-700 transition">
+                            <span id="skText13">No Room</span>
+                        </label>
+                    </div>
+                    <!-- 14 -->
+                    <div class="relative">
+                        <input type="checkbox" id="sk14" name="skills" value="Own Room" class="custom-checkbox hidden peer">
+                        <label for="sk14" class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:border-brand-300 peer-checked:border-brand-500 peer-checked:bg-brand-50 text-xs sm:text-sm font-medium text-slate-700 transition">
+                            <span id="skText14">Own Room</span>
+                        </label>
+                    </div>
+                    <!-- 15 -->
+                    <div class="relative">
+                        <input type="checkbox" id="sk15" name="skills" value="Share Job" class="custom-checkbox hidden peer">
+                        <label for="sk15" class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:border-brand-300 peer-checked:border-brand-500 peer-checked:bg-brand-50 text-xs sm:text-sm font-medium text-slate-700 transition">
+                            <span id="skText15">Share Job</span>
+                        </label>
+                    </div>
+                    <!-- 16 -->
+                    <div class="relative">
+                        <input type="checkbox" id="sk16" name="skills" value="Good Cook" class="custom-checkbox hidden peer">
+                        <label for="sk16" class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:border-brand-300 peer-checked:border-brand-500 peer-checked:bg-brand-50 text-xs sm:text-sm font-medium text-slate-700 transition">
+                            <span id="skText16">Good Cook</span>
+                        </label>
+                    </div>
+                    <!-- 17 -->
+                    <div class="relative">
+                        <input type="checkbox" id="sk17" name="skills" value="Eat pork" class="custom-checkbox hidden peer">
+                        <label for="sk17" class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:border-brand-300 peer-checked:border-brand-500 peer-checked:bg-brand-50 text-xs sm:text-sm font-medium text-slate-700 transition">
+                            <span id="skText17">Eat pork</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 7: Working Experience & Remarks -->
+            <div class="form-section" id="section7">
+                <div class="border-b border-slate-200 pb-3 mb-6">
+                    <h2 class="text-lg font-bold text-slate-900" id="sec7Title">7. Working Experience & Remarks</h2>
+                    <p class="text-xs text-slate-500 mt-1" id="sec7Sub">Write a summary of your past experience and additional notes.</p>
+                </div>
+
+                <div class="space-y-5">
+                    <!-- Working Experience Large Textarea -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1" id="lblWorkExp">My Working Experience</label>
+                        <textarea id="workExperience" name="workExperience" rows="4" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition text-sm" placeholder="e.g. 4 years in SG taking care of kids aged 6 & 9 / 2 years in HK taking care of elderly..."></textarea>
+                    </div>
+
+                    <!-- Remarks Large Textarea -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1" id="lblRemarks">Remarks</label>
+                        <textarea id="remarks" name="remarks" rows="3" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition text-sm" placeholder="e.g. I have tattoos, food allergies, special requests, etc."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex justify-between items-center mt-8 pt-5 border-t border-slate-200">
+                <button type="button" id="btnPrev" onclick="navigateStep(-1)" class="invisible flex items-center gap-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold px-5 py-2.5 rounded-xl text-sm transition duration-200">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span id="btnPrevText">Back</span>
+                </button>
+
+                <button type="button" id="btnNext" onclick="navigateStep(1)" class="flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold px-6 py-2.5 rounded-xl text-sm shadow-md shadow-brand-500/20 transition duration-200">
+                    <span id="btnNextText">Next Page</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+
+                <button type="submit" id="btnSubmit" class="hidden flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-7 py-2.5 rounded-xl text-sm shadow-md shadow-emerald-600/20 transition duration-200">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span id="btnSubmitText">Submit Questionnaire</span>
+                </button>
+            </div>
+
+            <div class="form-section" id="section8">
+                <div class="border-b border-slate-200 pb-3 mb-6">
+                    <h2 class="text-lg font-bold text-slate-900" id="sec8Title">8. Photo</h2>
+                    <p class="text-xs text-slate-500 mt-1" id="sec8Sub">Upload one clear half-body photo. It is compressed to 330×440 automatically.</p>
+                </div>
+                <div class="space-y-5">
+                    <!-- Photo -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1" id="lblPhoto">Photo <span class="text-red-500">*</span></label>
+                        <div class="flex items-start gap-4">
+                            <div class="w-[104px] h-[139px] shrink-0 rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 overflow-hidden flex items-center justify-center relative">
+                                <img id="photoPreview" class="hidden absolute inset-0 w-full h-full object-cover" alt="Photo">
+                                <i id="photoIcon" class="fa-solid fa-user text-slate-300 text-3xl"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <input type="file" id="photoFileCam" accept="image/*" capture="user" data-field="photo" class="hidden">
+                                <input type="file" id="photoFileLib" accept="image/*" data-field="photo" class="hidden">
+                                <div class="flex gap-2 flex-wrap">
+                                    <button type="button" id="btnPhotoCam" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-brand-500 hover:bg-brand-600 text-white text-xs font-semibold transition">
+                                        <i class="fa-solid fa-camera"></i><span id="btnPhotoCamText">Take photo</span>
+                                    </button>
+                                    <button type="button" id="btnPhotoLib" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-semibold transition">
+                                        <i class="fa-solid fa-image"></i><span id="btnPhotoLibText">Choose from gallery</span>
+                                    </button>
+                                    <button type="button" id="btnPhotoClear" class="hidden inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-semibold transition">
+                                        <i class="fa-solid fa-trash"></i><span id="btnPhotoClearText">Remove</span>
+                                    </button>
+                                </div>
+                                <p class="text-xs text-slate-500 mt-2" id="photoHint">Auto-compressed to 330×440 JPEG (~20KB) for fast loading.</p>
+                                <p class="text-red-500 text-xs mt-1 hidden" id="errPhoto">Photo is required. Please upload one photo.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Warning Modal (50% completeness gate) -->
+    <div id="warnModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex justify-center items-center p-4 hidden">
+        <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl text-center border border-amber-200">
+            <div class="w-16 h-16 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-2" id="warnTitle">To submit, please fill up at least 50%</h3>
+            <p class="text-sm text-slate-600 mb-6" id="warnMsg"></p>
+            <button type="button" onclick="closeWarn()" class="w-full bg-brand-500 hover:bg-brand-600 text-white font-semibold py-2.5 rounded-xl text-sm transition" id="warnBtn">OK</button>
+        </div>
+    </div>
+
+    <!-- Success Modal Popup -->
+    <div id="successModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex justify-center items-center p-4 hidden">
+        <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl text-center border border-slate-100">
+            <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-2" id="modalTitle">Submission Successful!</h3>
+            <p class="text-sm text-slate-600 mb-6" id="modalMsg">Thank you! Your questionnaire has been submitted successfully to DAO.</p>
+            <div id="candImportPanel" class="text-left border-t border-slate-200 pt-4 mb-4">
+                <p class="text-xs text-slate-600 mb-1">A CRM record was prepared from your answers. We tried to open <b>the CRM</b> and import it automatically.</p>
+                <p class="text-xs text-slate-500 mb-2">If the popup was blocked, copy the import code below, open the CRM, click <b>&ldquo;Import Candidate&rdquo;</b> on the Filipino / Indonesian FDH tab, and paste it.</p>
+                <textarea id="candImportCode" readonly rows="3" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-[11px] font-mono"></textarea>
+                <div class="flex gap-2 mt-2">
+                    <button type="button" onclick="copyCandCode()" class="flex-1 bg-slate-700 hover:bg-slate-800 text-white font-semibibold py-2 rounded-lg text-xs transition">Copy import code</button>
+                    <button type="button" onclick="openCrmImport()" class="flex-1 bg-brand-500 hover:bg-brand-600 text-white font-semibold py-2 rounded-lg text-xs transition">Open CRM</button>
+                </div>
+            </div>
+            <button type="button" onclick="closeModal()" class="w-full bg-brand-500 hover:bg-brand-600 text-white font-semibold py-2.5 rounded-xl text-sm transition" id="modalBtn">
+                OK / Close
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        let currentStep = 1;
+        const totalSteps = 8;
+        let currentLang = 'en'; // Default language is English
+
+        // Complete Translations Dictionary
+        const translations = {
+            en: {
+                headerTitle: "DAO",
+                headerSubtitle: "Professional Recruitment Services",
+                langBtnText: "🇮🇩 Bahasa Indonesia",
+                stepPrefix: "Step",
+                ofText: "of",
+                completedText: "Completed",
+                
+                // Badges
+                badge1: "1",
+                badge2: "2",
+                badge3: "3",
+                badge4: "4",
+                badge5: "5",
+                badge6: "6",
+                badge7: "7",
+                badge8: "8",
+
+                // Greeting & Step 1
+                greetingTitle: "Welcome to DAO Recruitment!",
+                greetingMsg: "Welcome! Please enter your basic name details to begin your recruitment application.",
+                sec1Title: "1. My Name",
+                sec1Sub: "Please tell us your full name and nationality.",
+                lblFullName: "Full Name",
+                lblNickname: "Nickname",
+                lblNationality: "Nationality",
+                optSelectNat: "Select nationality",
+                optIndo: "Indonesian",
+                optPh: "Filipino",
+                optOther: "Other",
+                errFullName: "Full Name is required.",
+
+                // Step 2
+                sec2Title: "2. Personal Information",
+                sec2Sub: "Please enter your background details.",
+                lblDob: "Date of Birth",
+                lblMarital: "Marital Status",
+                optSelectMar: "Select status",
+                optSingle: "Single",
+                optMarried: "Married",
+                optDivorced: "Divorced",
+                optWidowed: "Widowed",
+                lblChildren: "Number of Children",
+                lblEdu: "Education Level",
+                optSelectEdu: "Select education level",
+                optEduElem: "Elementary School",
+                optEduHigh: "High School",
+                optEduColl: "College / University",
+                optEduOther: "Others",
+                lblReligion: "Religion",
+                optSelectRel: "Select religion",
+                optRelChristian: "Christian",
+                optRelCatholic: "Catholic",
+                optRelMuslim: "Muslim",
+                optRelBuddhist: "Buddhist",
+                optRelOther: "Other",
+                lblHeight: "Height (cm)",
+                lblWeight: "Weight (kg)",
+
+                // Step 3
+                sec3Title: "3. Contact Details & Identification",
+                sec3Sub: "Please provide your HKID/Passport and at least ONE contact method.",
+                contactNoticeText: "At least ONE contact field (WhatsApp, Email, or Facebook) is required.",
+                lblPassport: "Passport No.",
+                lblHkid: "HKID No.",
+                errHkid: "HKID must be 6–7 digits, numbers only.",
+                errPassport: "Passport must be 6–12 letters/numbers.",
+                lblHkWa: "HK WhatsApp Number",
+                lblIndoWa: "Indonesia WhatsApp",
+                lblPhWa: "Filipino WhatsApp",
+                lblEmail: "Email Address",
+                lblFacebook: "Facebook Account",
+                errContact: "Please fill in at least ONE contact option above.",
+                errEmail: "Please enter a valid email address.",
+                errChildrenCount: "Number of children cannot be negative.",
+                errYearsExp: "Years of experience cannot be negative.",
+                errContractsCompleted: "Number of contracts cannot be negative.",
+                lblPhoto: "Photo",
+                btnPhotoCamText: "Take photo",
+                btnPhotoLibText: "Choose from gallery",
+                btnPhotoClearText: "Remove",
+                photoHint: "Auto-compressed to 330×440 JPEG for fast loading.",
+                errPhoto: "Photo is required. Please upload one photo.",
+                fillPctLabel: "Filled:",
+                warnFill50: "To submit, please fill up at least 50%",
+                warnFill50Sub: "Currently {pct}% completed ({f} of {t} fields). Please fill in more fields before submitting.",
+
+                // Step 4
+                sec4Title: "4. Language Proficiency & Total Experience",
+                sec4Sub: "Rate your speaking level for each language.",
+                thLang: "Language",
+                thNative: "Native",
+                thVeryGood: "Very Good",
+                thFair: "Fair",
+                thNone: "None",
+                rowEnglish: "English",
+                rowCantonese: "Cantonese",
+                rowMandarin: "Mandarin",
+                lblYearsExp: "Total Years of Experience",
+                lblContracts: "No. of Contracts Completed",
+
+                // Step 5
+                sec5Title: "5. My Best Interest",
+                sec5Sub: "Please select ONE primary skill/duty you are best at.",
+                biText1: "Take care Baby",
+                biText2: "Take care children",
+                biText3: "Take care elderly",
+                biText4: "Cleaning house and washing clothes",
+                biText5: "Cooking",
+                biText6: "Multi-tasking",
+
+                // Step 6
+                sec6Title: "6. My Skills and Experience",
+                sec6Sub: "Select all items you have experience with in previous employments.",
+                skText1: "No Holiday",
+                skText2: "New Born",
+                skText3: "Toddler",
+                skText4: "Elderly",
+                skText5: "Serious Illness",
+                skText6: "Special Child",
+                skText7: "Dog Care",
+                skText8: "Cat Care",
+                skText9: "Wash Car",
+                skText10: "Driving",
+                skText11: "Male Helper",
+                skText12: "Male Employer",
+                skText13: "No Room",
+                skText14: "Own Room",
+                skText15: "Share Job",
+                skText16: "Good Cook",
+                skText17: "Eat pork",
+
+                // Step 7
+                sec7Title: "7. Working Experience & Remarks",
+                sec8Title: "8. Photo",
+                sec8Sub: "Upload one clear half-body photo. It is compressed to 330×440 automatically.",
+                sec7Sub: "Write a summary of your past experience and additional notes.",
+                lblWorkExp: "My Working Experience",
+                lblRemarks: "Remarks",
+
+                // Navigation Buttons & Modal
+                btnPrevText: "Back",
+                btnNextText: "Next Page",
+                btnSubmitText: "Submit Questionnaire",
+                modalTitle: "Submission Successful!",
+                modalMsg: "Thank you! Your questionnaire has been submitted successfully to {CO}.",
+                modalBtn: "OK / Close"
+            },
+            id: {
+                headerTitle: "DAO",
+                headerSubtitle: "Layanan Perekrutan Profesional",
+                langBtnText: "🇬🇧 English",
+                stepPrefix: "Langkah",
+                ofText: "dari",
+                completedText: "Selesai",
+                
+                // Badges
+                badge1: "1",
+                badge2: "2",
+                badge3: "3",
+                badge4: "4",
+                badge5: "5",
+                badge6: "6",
+                badge7: "7",
+                badge8: "8",
+
+                // Greeting & Step 1
+                greetingTitle: "Selamat Datang di Perekrutan DAO!",
+                greetingMsg: "Selamat Datang! Silakan masukkan nama dan kewarganegaraan Anda untuk memulai pendaftaran.",
+                sec1Title: "1. Nama Saya",
+                sec1Sub: "Silakan masukkan nama lengkap dan kewarganegaraan Anda.",
+                lblFullName: "Nama Lengkap",
+                lblNickname: "Nama Panggilan",
+                lblNationality: "Kewarganegaraan",
+                optSelectNat: "Pilih kewarganegaraan",
+                optIndo: "Indonesia",
+                optPh: "Filipina",
+                optOther: "Lainnya",
+                errFullName: "Nama Lengkap wajib diisi.",
+
+                // Step 2
+                sec2Title: "2. Informasi Pribadi",
+                sec2Sub: "Silakan isi rincian latar belakang pribadi Anda.",
+                lblDob: "Tanggal Lahir",
+                lblMarital: "Status Pernikahan",
+                optSelectMar: "Pilih status",
+                optSingle: "Belum Menikah",
+                optMarried: "Menikah",
+                optDivorced: "Cerai",
+                optWidowed: "Janda / Duda",
+                lblChildren: "Jumlah Anak",
+                lblEdu: "Pendidikan Terakhir",
+                optSelectEdu: "Pilih tingkat pendidikan",
+                optEduElem: "Sekolah Dasar (SD)",
+                optEduHigh: "SMP / SMA",
+                optEduColl: "Perguruan Tinggi / Universitas",
+                optEduOther: "Lainnya",
+                lblReligion: "Agama",
+                optSelectRel: "Pilih agama",
+                optRelChristian: "Kristen",
+                optRelCatholic: "Katolik",
+                optRelMuslim: "Islam",
+                optRelBuddhist: "Buddha",
+                optRelOther: "Lainnya",
+                lblHeight: "Tinggi Badan (cm)",
+                lblWeight: "Berat Badan (kg)",
+
+                // Step 3
+                sec3Title: "3. Rincian Kontak & Identitas",
+                sec3Sub: "Isi nomor paspor/HKID dan minimal SATU kontak yang bisa dihubungi.",
+                contactNoticeText: "Minimal SATU kontak (WhatsApp, Email, atau Facebook) wajib diisi.",
+                lblPassport: "No. Paspor",
+                lblHkid: "No. HKID",
+                errHkid: "HKID harus 6–7 digit angka saja.",
+                errPassport: "Paspor harus 6–12 huruf/angka.",
+                lblHkWa: "Nomor WhatsApp HK",
+                lblIndoWa: "Nomor WhatsApp Indonesia",
+                lblPhWa: "Nomor WhatsApp Filipina",
+                lblEmail: "Alamat Email",
+                lblFacebook: "Akun Facebook",
+                errContact: "Silakan isi minimal SATU kontak di atas.",
+                errEmail: "Masukkan alamat email yang sah.",
+                errChildrenCount: "Jumlah anak tidak boleh negatif.",
+                errYearsExp: "Tahun pengalaman tidak boleh negatif.",
+                errContractsCompleted: "Jumlah kontrak tidak boleh negatif.",
+                lblPhoto: "Foto",
+                btnPhotoCamText: "Ambil foto",
+                btnPhotoLibText: "Pilih daripada galeri",
+                btnPhotoClearText: "Buang",
+                photoHint: "Otomatis dikompres ke JPEG 330×440 supaya cepat dimuatkan.",
+                errPhoto: "Foto diperlukan. Sila muat naik satu foto.",
+                fillPctLabel: "Terisi:",
+                warnFill50: "Untuk submit, sila isi sekurang-kurangnya 50%",
+                warnFill50Sub: "Sekarang {pct}% selesai ({f} daripada {t} medan). Sila isi lebih banyak medan sebelum submit.",
+
+                // Step 4
+                sec4Title: "4. Kemampuan Bahasa & Pengalaman",
+                sec4Sub: "Tentukan tingkat kemampuan bicara Anda untuk setiap bahasa.",
+                thLang: "Bahasa",
+                thNative: "Bahasa Ibu",
+                thVeryGood: "Sangat Baik",
+                thFair: "Cukup",
+                thNone: "Tidak Bisa",
+                rowEnglish: "Bahasa Inggris",
+                rowCantonese: "Bahasa Kanton",
+                rowMandarin: "Bahasa Mandarin",
+                lblYearsExp: "Total Tahun Pengalaman Kerja",
+                lblContracts: "Jumlah Kontrak Selesai",
+
+                // Step 5
+                sec5Title: "5. Minat Utama Saya",
+                sec5Sub: "Pilih SATU pekerjaan utama yang paling Anda kuasai.",
+                biText1: "Merawat Bayi",
+                biText2: "Merawat Anak-anak",
+                biText3: "Merawat Lansia",
+                biText4: "Membersihkan Rumah & Mencuci Baju",
+                biText5: "Memasak",
+                biText6: "Serba Bisa (Multi-tasking)",
+
+                // Step 6
+                sec6Title: "6. Keahlian & Pengalaman Kerja",
+                sec6Sub: "Pilih semua poin yang pernah Anda kerjakan pada majikan sebelumnya.",
+                skText1: "Tidak Ada Libur",
+                skText2: "Bayi Baru Lahir",
+                skText3: "Balita",
+                skText4: "Lansia",
+                skText5: "Sakit Parah",
+                skText6: "Anak Berkebutuhan Khusus",
+                skText7: "Merawat Anjing",
+                skText8: "Merawat Kucing",
+                skText9: "Mencuci Mobil",
+                skText10: "Mengemudi / Menyetir",
+                skText11: "Pembantu Pria",
+                skText12: "Majikan Pria",
+                skText13: "Tidak Ada Kamar Sendiri",
+                skText14: "Kamar Sendiri",
+                skText15: "Kerja Berbagi (Share Job)",
+                skText16: "Pintar Memasak",
+                skText17: "Makan Daging Babi",
+
+                // Step 7
+                sec7Title: "7. Pengalaman Kerja & Catatan",
+                sec8Title: "8. Foto",
+                sec8Sub: "Muat naik satu foto separuh badan yang jelas. Ia dikompres secara automatik kepada 330×440.",
+                sec7Sub: "Tuliskan ringkasan pengalaman kerja dan catatan tambahan Anda.",
+                lblWorkExp: "Pengalaman Kerja Saya",
+                lblRemarks: "Catatan Tambahan",
+
+                // Navigation Buttons & Modal
+                btnPrevText: "Kembali",
+                btnNextText: "Halaman Selanjutnya",
+                btnSubmitText: "Kirim Formulir",
+                modalTitle: "Berhasil Dikirim!",
+                modalMsg: "Terima kasih! Formulir Anda telah berhasil dikirim ke {CO}.",
+                modalBtn: "OK / Tutup"
+            }
+        };
+
+        // Toggle Language Function
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'id' : 'en';
+            applyLanguage();
+        }
+
+        /* 標題公司名：從 CRM 草稿（wb_crm_draft）讀 meta.companyName */
+        function crmCompanyName(){
+            try{
+                var raw=localStorage.getItem('wb_crm_draft');
+                if(!raw) return '';
+                var db=JSON.parse(raw);
+                var n=db && db.meta && db.meta.companyName;
+                return (n && String(n).trim()) ? String(n).trim() : '';
+            }catch(e){ return ''; }
+        }
+
+        /* 用公司名填 {CO} 佔位符 */
+        function fillCompany(str){
+            var c = crmCompanyName();
+            return String(str||'').split('{CO}').join(c || 'DAO');
+        }
+
+        function applyLanguage() {
+            const t = translations[currentLang];
+
+            // Header & Lang button
+            document.getElementById('headerTitle').innerText = crmCompanyName() || t.headerTitle;
+            document.title = (crmCompanyName() || 'DAO') + ' - ' + (currentLang==='id' ? 'Formulir Kandidat' : 'Candidate Questionnaire');
+            document.getElementById('headerSubtitle').innerText = t.headerSubtitle;
+            document.getElementById('langBtnText').innerText = t.langBtnText;
+
+            // Step Badges
+            document.querySelectorAll('.step-badge').forEach(function(b, i){ b.innerText = String(i + 1); });
+
+            // Greeting & Step 1
+            document.getElementById('greetingTitle').innerText = t.greetingTitle;
+            document.getElementById('greetingMsg').innerText = t.greetingMsg;
+            document.getElementById('sec1Title').innerText = t.sec1Title;
+            document.getElementById('sec1Sub').innerText = t.sec1Sub;
+            document.getElementById('lblFullName').innerHTML = `${t.lblFullName} <span class="text-red-500">*</span>`;
+            document.getElementById('lblNickname').innerText = t.lblNickname;
+            document.getElementById('lblNationality').innerText = t.lblNationality;
+            document.getElementById('optSelectNat').innerText = t.optSelectNat;
+            document.getElementById('optIndo').innerText = t.optIndo;
+            document.getElementById('optPh').innerText = t.optPh;
+            document.getElementById('optOther').innerText = t.optOther;
+            document.getElementById('errFullName').innerText = t.errFullName;
+
+            // Step 2
+            document.getElementById('sec2Title').innerText = t.sec2Title;
+            document.getElementById('sec2Sub').innerText = t.sec2Sub;
+            document.getElementById('lblDob').innerText = t.lblDob;
+            document.getElementById('lblMarital').innerText = t.lblMarital;
+            document.getElementById('optSelectMar').innerText = t.optSelectMar;
+            document.getElementById('optSingle').innerText = t.optSingle;
+            document.getElementById('optMarried').innerText = t.optMarried;
+            document.getElementById('optDivorced').innerText = t.optDivorced;
+            document.getElementById('optWidowed').innerText = t.optWidowed;
+            document.getElementById('lblChildren').innerText = t.lblChildren;
+            document.getElementById('lblEdu').innerText = t.lblEdu;
+            document.getElementById('optSelectEdu').innerText = t.optSelectEdu;
+            document.getElementById('optEduElem').innerText = t.optEduElem;
+            document.getElementById('optEduHigh').innerText = t.optEduHigh;
+            document.getElementById('optEduColl').innerText = t.optEduColl;
+            document.getElementById('optEduOther').innerText = t.optEduOther;
+            document.getElementById('lblReligion').innerText = t.lblReligion;
+            document.getElementById('optSelectRel').innerText = t.optSelectRel;
+            document.getElementById('optRelChristian').innerText = t.optRelChristian;
+            document.getElementById('optRelCatholic').innerText = t.optRelCatholic;
+            document.getElementById('optRelMuslim').innerText = t.optRelMuslim;
+            document.getElementById('optRelBuddhist').innerText = t.optRelBuddhist;
+            document.getElementById('optRelOther').innerText = t.optRelOther;
+            document.getElementById('lblHeight').innerText = t.lblHeight;
+            document.getElementById('lblWeight').innerText = t.lblWeight;
+
+            // Step 3
+            document.getElementById('sec3Title').innerText = t.sec3Title;
+            document.getElementById('sec3Sub').innerText = t.sec3Sub;
+            document.getElementById('contactNoticeText').innerText = t.contactNoticeText;
+            document.getElementById('lblPassport').innerText = t.lblPassport;
+            document.getElementById('lblHkid').innerText = t.lblHkid;
+            document.getElementById('errHkid').innerText = t.errHkid;
+            document.getElementById('errPassport').innerText = t.errPassport;
+            document.getElementById('lblHkWa').innerText = t.lblHkWa;
+            document.getElementById('lblIndoWa').innerText = t.lblIndoWa;
+            document.getElementById('lblPhWa').innerText = t.lblPhWa;
+            document.getElementById('lblEmail').innerText = t.lblEmail;
+            document.getElementById('lblFacebook').innerText = t.lblFacebook;
+            document.getElementById('errContact').innerText = t.errContact;
+            document.getElementById('errEmail').innerText = t.errEmail;
+            document.getElementById('errChildrenCount').innerText = t.errChildrenCount;
+            document.getElementById('errYearsExp').innerText = t.errYearsExp;
+            document.getElementById('errContractsCompleted').innerText = t.errContractsCompleted;
+            document.getElementById('lblPhoto').innerText = t.lblPhoto;
+            document.getElementById('btnPhotoCamText').innerText = t.btnPhotoCamText;
+            document.getElementById('btnPhotoLibText').innerText = t.btnPhotoLibText;
+            document.getElementById('btnPhotoClearText').innerText = t.btnPhotoClearText;
+            document.getElementById('photoHint').innerText = t.photoHint;
+            document.getElementById('errPhoto').innerText = t.errPhoto;
+
+            // Step 4
+            document.getElementById('sec4Title').innerText = t.sec4Title;
+            document.getElementById('sec4Sub').innerText = t.sec4Sub;
+            document.getElementById('thLang').innerText = t.thLang;
+            document.getElementById('thNative').innerText = t.thNative;
+            document.getElementById('thVeryGood').innerText = t.thVeryGood;
+            document.getElementById('thFair').innerText = t.thFair;
+            document.getElementById('thNone').innerText = t.thNone;
+            document.getElementById('rowEnglish').innerText = t.rowEnglish;
+            document.getElementById('rowCantonese').innerText = t.rowCantonese;
+            document.getElementById('rowMandarin').innerText = t.rowMandarin;
+            document.getElementById('lblYearsExp').innerText = t.lblYearsExp;
+            document.getElementById('lblContracts').innerText = t.lblContracts;
+
+            // Step 5
+            document.getElementById('sec5Title').innerText = t.sec5Title;
+            document.getElementById('sec5Sub').innerText = t.sec5Sub;
+            for (let i = 1; i <= 6; i++) {
+                document.getElementById(`biText${i}`).innerText = t[`biText${i}`];
+            }
+
+            // Step 6
+            document.getElementById('sec6Title').innerText = t.sec6Title;
+            document.getElementById('sec6Sub').innerText = t.sec6Sub;
+            for (let i = 1; i <= 17; i++) {
+                document.getElementById(`skText${i}`).innerText = t[`skText${i}`];
+            }
+
+            // Step 7
+            document.getElementById('sec7Title').innerText = t.sec7Title;
+            document.getElementById('sec8Title').innerText = t.sec8Title;
+            document.getElementById('sec8Sub').innerText = t.sec8Sub;
+            document.getElementById('sec7Sub').innerText = t.sec7Sub;
+            document.getElementById('lblWorkExp').innerText = t.lblWorkExp;
+            document.getElementById('lblRemarks').innerText = t.lblRemarks;
+
+            // Navigation & Modal
+            document.getElementById('btnPrevText').innerText = t.btnPrevText;
+            document.getElementById('btnNextText').innerText = t.btnNextText;
+            document.getElementById('btnSubmitText').innerText = t.btnSubmitText;
+            document.getElementById('modalTitle').innerText = t.modalTitle;
+            document.getElementById('modalMsg').innerText = fillCompany(t.modalMsg);
+            document.getElementById('modalBtn').innerText = t.modalBtn;
+
+            updateProgressUI();
+            updateFillPct();
+        }
+
+        // Navigation Control
+        function navigateStep(direction) {
+            // Check validations before moving forward
+            if (direction === 1) {
+                // Validation for Step 1 (Full Name Required)
+                if (currentStep === 1) {
+                    const fullName = document.getElementById('fullName').value.trim();
+                    if (!fullName) {
+                        document.getElementById('errFullName').classList.remove('hidden');
+                        document.getElementById('fullName').focus();
+                        return;
+                    } else {
+                        document.getElementById('errFullName').classList.add('hidden');
+                    }
+                }
+
+                // Validation for Step 3 (At least ONE contact method)
+                if (currentStep === 3) {
+                    const hk = document.getElementById('hkWhatsapp').value.trim();
+                    const id = document.getElementById('indoWhatsapp').value.trim();
+                    const ph = document.getElementById('phWhatsapp').value.trim();
+                    const email = document.getElementById('email').value.trim();
+                    const fb = document.getElementById('facebook').value.trim();
+
+                    if (!hk && !id && !ph && !email && !fb) {
+                        document.getElementById('errContact').classList.remove('hidden');
+                        return;
+                    } else {
+                        document.getElementById('errContact').classList.add('hidden');
+                    }
+                }
+            }
+
+            // Update current step index
+            currentStep += direction;
+            if (currentStep < 1) currentStep = 1;
+            if (currentStep > totalSteps) currentStep = totalSteps;
+
+            // Render Active Section
+            document.querySelectorAll('.form-section').forEach((sec, idx) => {
+                if (idx + 1 === currentStep) {
+                    sec.classList.add('active');
+                } else {
+                    sec.classList.remove('active');
+                }
+            });
+
+            clearFieldErrors();
+            updateProgressUI();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Update Progress Bar, Badges and Buttons
+        function updateProgressUI() {
+            const t = translations[currentLang];
+
+            // Progress Percentage Calculation
+            const percent = Math.round((currentStep / totalSteps) * 100);
+            document.getElementById('progressBar').style.width = percent + '%';
+            document.getElementById('progressPercentage').innerText = `${percent}% ${t.completedText}`;
+            document.getElementById('stepCounterLabel').innerText = `${t.stepPrefix} ${currentStep} ${t.ofText} ${totalSteps}`;
+
+            // Badges UI State
+            document.querySelectorAll('.step-badge').forEach((badge, idx) => {
+                const stepNum = idx + 1;
+                if (stepNum === currentStep) {
+                    badge.className = "step-badge px-3 py-1.5 rounded-lg bg-brand-500 text-white font-bold shadow-sm transition-all duration-200";
+                } else if (stepNum < currentStep) {
+                    badge.className = "step-badge px-3 py-1.5 rounded-lg bg-brand-100 text-brand-700 font-semibold transition-all duration-200";
+                } else {
+                    badge.className = "step-badge px-3 py-1.5 rounded-lg bg-slate-200 text-slate-500 font-medium transition-all duration-200";
+                }
+            });
+
+            // Back Button visibility
+            const btnPrev = document.getElementById('btnPrev');
+            if (currentStep === 1) {
+                btnPrev.classList.add('invisible');
+            } else {
+                btnPrev.classList.remove('invisible');
+            }
+
+            // Next / Submit Button toggle
+            const btnNext = document.getElementById('btnNext');
+            const btnSubmit = document.getElementById('btnSubmit');
+
+            if (currentStep === totalSteps) {
+                btnNext.classList.add('hidden');
+                btnSubmit.classList.remove('hidden');
+            } else {
+                btnNext.classList.remove('hidden');
+                btnSubmit.classList.add('hidden');
+            }
+        }
+
+
+/* ── 相片壓縮：330×440 JPEG ───────────────────────────────────────
+   1) createImageBitmap({imageOrientation:'from-image'}) 自動修正手機 EXIF 方向
+   2) cover 裁切（略偏上 40%，保留人頭）→ 固定 330×440 輸出
+   3) JPEG 編碼；超出上限就逐級降低 quality 重試（保證容量）           */
+const PHOTO_W=330, PHOTO_H=440, PHOTO_Q=0.72, PHOTO_MAX_BYTES=28*1024;
+function photoBytes(durl){ return Math.round(String(durl||'').length*0.75); }
+function photoLoadViaImg(file){
+  return new Promise(function(res, rej){
+    var fr=new FileReader();
+    fr.onload=function(e){ var im=new Image();
+      im.onload=function(){ res({src:im, w:im.naturalWidth||im.width, h:im.naturalHeight||im.height, close:function(){}}); };
+      im.onerror=function(){ rej(new Error('decode')); };
+      im.src=e.target.result; };
+    fr.onerror=function(){ rej(new Error('read')); };
+    fr.readAsDataURL(file);
+  });
+}
+function photoLoadImage(file){
+  return new Promise(function(res, rej){
+    if(window.createImageBitmap){
+      createImageBitmap(file,{imageOrientation:'from-image'}).then(
+        function(bm){ res({src:bm, w:bm.width, h:bm.height, close:function(){ try{bm.close();}catch(e){} }}); },
+        function(){ photoLoadViaImg(file).then(res, rej); });
+    } else { photoLoadViaImg(file).then(res, rej); }
+  });
+}
+function photoCompress(file){
+  return photoLoadImage(file).then(function(im){
+    var w=im.w, h=im.h;
+    if(!w || !h) throw new Error('bad size');
+    var s=Math.max(PHOTO_W/w, PHOTO_H/h);
+    var cw=Math.min(w, PHOTO_W/s), ch=Math.min(h, PHOTO_H/s);
+    var sx=Math.max(0,(w-cw)/2), sy=Math.max(0,(h-ch)*0.40);
+    var cv=document.createElement('canvas'); cv.width=PHOTO_W; cv.height=PHOTO_H;
+    var cx=cv.getContext('2d');
+    cx.fillStyle='#fff'; cx.fillRect(0,0,PHOTO_W,PHOTO_H);
+    cx.drawImage(im.src, sx, sy, cw, ch, 0, 0, PHOTO_W, PHOTO_H);
+    im.close();
+    var q=PHOTO_Q, url=cv.toDataURL('image/jpeg', q);
+    while(q>0.45 && photoBytes(url)>PHOTO_MAX_BYTES){ q-=0.08; url=cv.toDataURL('image/jpeg', q); }
+    if(!url || url.indexOf('data:image/jpeg')!==0) throw new Error('encode');
+    return url;
+  });
+}
+        /* ── 完整度計算（PRD 流程1：50% 門檻）──────────────────────────
+           分母 = 全部可填欄位：
+             · input / select / textarea  各算 1 個
+             · 單選（radio）以 name 為一組算 1 個
+             · 勾選（checkbox）以 name 為一組算 1 個
+             · 同一 data-field 的控制項（例如相片嘅拍攝／相簿）合併為 1 個
+           分母動態由 DOM 計，日後加欄位唔使改程式。                        */
+        function calcCompleteness(root){
+            root = root || document.getElementById('questionnaireForm') || document.body;
+            var singles = [], radios = {}, checks = {}, files = {};
+            root.querySelectorAll('input, select, textarea').forEach(function(el){
+                var t = (el.type || '').toLowerCase();
+                var df = el.getAttribute('data-field') || '';
+                if(el.tagName === 'SELECT' || el.tagName === 'TEXTAREA'){ singles.push(el); return; }
+                if(t === 'radio'){ (radios[el.name] = radios[el.name] || []).push(el); return; }
+                if(t === 'checkbox'){ (checks[el.name] = checks[el.name] || []).push(el); return; }
+                if(t === 'hidden' || t === 'button' || t === 'submit' || t === 'reset') return;
+                if(t === 'file'){ (files[df || el.id] = files[df || el.id] || []).push(el); return; }
+                singles.push(el);
+            });
+            var rk = Object.keys(radios), ck = Object.keys(checks), fk = Object.keys(files);
+            var total = singles.length + rk.length + ck.length + fk.length;
+            var filled = 0;
+            singles.forEach(function(el){ if(String(el.value == null ? '' : el.value).trim() !== '') filled++; });
+            rk.forEach(function(n){ if(radios[n].some(function(e){ return e.checked; })) filled++; });
+            ck.forEach(function(n){ if(checks[n].some(function(e){ return e.checked; })) filled++; });
+            fk.forEach(function(n){ if(files[n].some(function(e){ return e.getAttribute('data-filled') === '1' || (e.files && e.files.length); })) filled++; });
+            return { filled: filled, total: total, pct: total ? Math.round(filled * 100 / total) : 100 };
+        }
+        function showWarn(title, msg){
+            var m = document.getElementById('warnModal');
+            if(!m) return;
+            document.getElementById('warnTitle').innerText = title;
+            document.getElementById('warnMsg').innerText = msg;
+            m.classList.remove('hidden');
+            var b = document.getElementById('warnBtn'); if(b) b.focus();
+        }
+        function closeWarn(){
+            var m = document.getElementById('warnModal');
+            if(m) m.classList.add('hidden');
+        }
+        function updateFillPct(){
+            var el = document.getElementById('fillPercentage');
+            if(!el) return null;
+            var c = calcCompleteness(document.getElementById('questionnaireForm'));
+            el.innerText = translations[currentLang].fillPctLabel + ' ' + c.pct + '%';
+            el.className = 'text-xs font-semibold ' + (c.pct >= 50 ? 'text-emerald-600' : 'text-amber-600');
+            /* 填夠 50% 就自動收起警示彈窗 */
+            if(c.pct >= 50){
+                var wm = document.getElementById('warnModal');
+                if(wm && !wm.classList.contains('hidden')) wm.classList.add('hidden');
+            }
+            return c;
+        }
+
+        /* ── 相片：上載／拍攝 → 壓縮 → 預覽 ── */
+        var PHOTO_STORE_PREFIX = 'ddhc_cand_photo_';
+        var photoDataUrl = '', photoStoreKey = '';
+        function photoPruneTemps(){
+            try{
+                var now=Date.now(), keys=[];
+                for(var i=0;i<localStorage.length;i++){
+                    var k=localStorage.key(i);
+                    if(k && k.indexOf(PHOTO_STORE_PREFIX)===0){
+                        var ts=parseInt(k.slice(PHOTO_STORE_PREFIX.length),10);
+                        if(!isNaN(ts) && (now-ts)>7*86400000){ try{ localStorage.removeItem(k); }catch(e){} }
+                        else keys.push({k:k, ts:isNaN(ts)?0:ts});
+                    }
+                }
+                keys.sort(function(a,b){ return a.ts-b.ts; });
+                while(keys.length>20){ try{ localStorage.removeItem(keys.shift().k); }catch(e){} }
+            }catch(e){}
+        }
+        function photoRender(){
+            var img=document.getElementById('photoPreview');
+            var ic=document.getElementById('photoIcon');
+            var cl=document.getElementById('btnPhotoClear');
+            var er=document.getElementById('errPhoto');
+            if(er) er.classList.add('hidden');
+            if(photoDataUrl){
+                img.src=photoDataUrl; img.classList.remove('hidden'); ic.classList.add('hidden');
+                cl.classList.remove('hidden');
+            } else {
+                img.removeAttribute('src'); img.classList.add('hidden'); ic.classList.remove('hidden');
+                cl.classList.add('hidden');
+            }
+        }
+        function photoHandleFile(file){
+            var er=document.getElementById('errPhoto');
+            if(!file) return;
+            if(!/^image\//.test(file.type||'')){
+                er.textContent = translations[currentLang].errPhoto; er.classList.remove('hidden'); return;
+            }
+            photoCompress(file).then(function(url){
+                photoDataUrl=url; photoStoreKey=''; photoRender();
+                ['photoFileCam','photoFileLib'].forEach(function(id){ var e=document.getElementById(id); if(e) e.setAttribute('data-filled','1'); });
+                var hint=document.getElementById('photoHint');
+                hint.textContent = translations[currentLang].photoHint + '  (' + Math.round(photoBytes(url)/1024) + ' KB)';
+            }).catch(function(){
+                er.textContent = translations[currentLang].errPhoto; er.classList.remove('hidden');
+            });
+        }
+        function photoEnsureStored(){
+            if(!photoDataUrl) return '';
+            if(photoStoreKey) return photoStoreKey;
+            photoPruneTemps();
+            photoStoreKey = PHOTO_STORE_PREFIX + Date.now() + '_' + Math.floor(Math.random()*1000);
+            try{ localStorage.setItem(photoStoreKey, photoDataUrl); }
+            catch(e){ photoStoreKey=''; }
+            return photoStoreKey;
+        }
+        // ── Candidate → CRM import helpers ──
+        let lastCandCode = '';
+
+        function getVal(id){ const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+        function getRadio(name){ const el = document.querySelector('input[name="'+name+'"]:checked'); return el ? el.value : ''; }
+        function getChecks(name){ return Array.from(document.querySelectorAll('input[name="'+name+'"]:checked')).map(function(x){ return x.value; }); }
+
+        function buildCandidatePayload(){
+            const fields = {
+                fullName: getVal('fullName'),
+                nickname: getVal('nickname'),
+                nationality: getVal('nationality'),
+                dob: getVal('dob'),
+                maritalStatus: getVal('maritalStatus'),
+                childrenCount: getVal('childrenCount'),
+                educationLevel: getVal('educationLevel'),
+                religion: getVal('religion'),
+                height: getVal('height'),
+                weight: getVal('weight'),
+                hkid: getVal('hkid'),
+                passport: getVal('passport'),
+                hkWhatsapp: getVal('hkWhatsapp'),
+                indoWhatsapp: getVal('indoWhatsapp'),
+                phWhatsapp: getVal('phWhatsapp'),
+                email: getVal('email'),
+                facebook: getVal('facebook'),
+                lang_english: getRadio('lang_english'),
+                lang_cantonese: getRadio('lang_cantonese'),
+                lang_mandarin: getRadio('lang_mandarin'),
+                yearsExp: getVal('yearsExp'),
+                contractsCompleted: getVal('contractsCompleted'),
+                bestInterest: getRadio('bestInterest'),
+                skills: getChecks('skills'),
+                workExperience: getVal('workExperience'),
+                remarks: getVal('remarks'),
+                photoKey: photoStoreKey ? photoStoreKey.slice(PHOTO_STORE_PREFIX.length) : ''
+            };
+            return { src:'candidate_question', v:1, fields: fields };
+        }
+
+        function encodePayload(payload){
+            const json = JSON.stringify(payload);
+            return btoa(unescape(encodeURIComponent(json)));
+        }
+
+        function copyCandCode(){
+            if(!lastCandCode) return;
+            if(navigator.clipboard && navigator.clipboard.writeText){
+                navigator.clipboard.writeText(lastCandCode).then(
+                    function(){ alert('Import code copied to clipboard.'); },
+                    function(){ alert('Copy failed — please select the code manually.'); }
+                );
+            } else {
+                const ta = document.getElementById('candImportCode');
+                if(ta){ ta.focus(); ta.select(); try{ document.execCommand('copy'); alert('Import code copied.'); }catch(e){ alert('Please copy the code manually.'); } }
+            }
+        }
+
+        function openCrmImport(){
+            if(!lastCandCode) return;
+            window.open('ddhc salespro crm v2.5.html#cand=' + encodeURIComponent(lastCandCode), '_blank');
+        }
+
+        /* ── 送出前驗證 ───────────────────────────────────────────────
+           問題：這份問卷是 7 步單一 <form>，step 2/3/4 的欄位在 step 7 時是
+           display:none。若欄位值不合法，瀏覽器原生驗證會在 submit 事件之前
+           直接攔截，而且無法 focus 隱藏欄位 → 使用者看到「按了完全沒反應」。
+           解法：form 加 novalidate，改由這裡驗證；發現錯誤就跳回該步驟，
+                讓錯誤訊息真的看得到。                                      */
+        var FIELD_ERROR_IDS = ['errFullName','errHkid','errPassport','errContact','errPhoto',
+                               'errEmail','errChildrenCount','errYearsExp','errContractsCompleted'];
+        function clearFieldErrors(){
+            FIELD_ERROR_IDS.forEach(function(id){
+                var el = document.getElementById(id); if(el) el.classList.add('hidden');
+            });
+        }
+        function jumpToStep(n){
+            if(n < 1) n = 1;
+            if(n > totalSteps) n = totalSteps;
+            currentStep = n;
+            document.querySelectorAll('.form-section').forEach(function(sec, idx){
+                if(idx + 1 === currentStep) sec.classList.add('active');
+                else sec.classList.remove('active');
+            });
+            updateProgressUI();
+            window.scrollTo({ top:0, behavior:'smooth' });
+        }
+        function isBadNumber(v){ return v !== '' && (isNaN(Number(v)) || Number(v) < 0); }
+        function validateBeforeSubmit(){
+            clearFieldErrors();
+            var hk = getVal('hkid');
+            var pp = getVal('passport');
+            var em = getVal('email');
+            var bad = null, errId = null, step = null;
+            if(!photoDataUrl){ bad='btnPhotoCam'; errId='errPhoto'; step=8; }
+            else if(hk && !/^[0-9]{6,7}$/.test(hk)){ bad='hkid'; errId='errHkid'; step=3; }
+            else if(pp && !/^[A-Z0-9()\-]{6,12}$/i.test(pp)){ bad='passport'; errId='errPassport'; step=3; }
+            else if(em && !/^[^\s@]+@[^\s@]+$/.test(em)){ bad='email'; errId='errEmail'; step=3; }
+            else if(isBadNumber(getVal('childrenCount'))){ bad='childrenCount'; errId='errChildrenCount'; step=2; }
+            else if(isBadNumber(getVal('yearsExp'))){ bad='yearsExp'; errId='errYearsExp'; step=4; }
+            else if(isBadNumber(getVal('contractsCompleted'))){ bad='contractsCompleted'; errId='errContractsCompleted'; step=4; }
+            if(!bad) return true;
+            /* 先跳回出錯的步驟讓欄位可見，之後錯誤訊息才看得到 */
+            jumpToStep(step);
+            var el = document.getElementById(errId);
+            if(el) el.classList.remove('hidden');
+            var f = document.getElementById(bad);
+            if(f){ setTimeout(function(){ f.focus(); if(f.scrollIntoView) f.scrollIntoView({behavior:'smooth', block:'center'}); }, 80); }
+            return false;
+        }
+
+        // Handle Form Submission
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            /* PRD 流程1：未達 50% 完整度 → 攔截提交並彈窗提示 */
+            var fill = calcCompleteness(document.getElementById('questionnaireForm'));
+            if(fill.pct < 50){
+                showWarn(translations[currentLang].warnFill50,
+                         translations[currentLang].warnFill50Sub
+                            .split('{pct}').join(String(fill.pct))
+                            .split('{f}').join(String(fill.filled))
+                            .split('{t}').join(String(fill.total)));
+                return;
+            }
+            if(!validateBeforeSubmit()) return;
+            photoEnsureStored();
+            const payload = buildCandidatePayload();
+            lastCandCode = encodePayload(payload);
+            try { localStorage.setItem('ddhc_candidate_import', lastCandCode); } catch(err){}
+            const ta = document.getElementById('candImportCode');
+            if(ta) ta.value = lastCandCode;
+            // Try to auto-open the CRM with the import code (URL hash is origin-safe on file:// and http://)
+            try { window.open('ddhc salespro crm v2.5.html#cand=' + encodeURIComponent(lastCandCode), '_blank'); } catch(err){}
+            // Show Success Modal
+            document.getElementById('successModal').classList.remove('hidden');
+        }
+
+        // Photo: camera / gallery / clear
+        (function(){
+            var cam=document.getElementById('btnPhotoCam'), lib=document.getElementById('btnPhotoLib');
+            var fc=document.getElementById('photoFileCam'), fl=document.getElementById('photoFileLib');
+            var cl=document.getElementById('btnPhotoClear');
+            if(!cam) return;
+            cam.onclick=function(){ fc.click(); };
+            lib.onclick=function(){ fl.click(); };
+            cl.onclick=function(){ photoDataUrl=''; photoStoreKey=''; photoRender();
+                ['photoFileCam','photoFileLib'].forEach(function(id){ var e=document.getElementById(id); if(e) e.removeAttribute('data-filled'); }); };
+            fc.onchange=function(e){ photoHandleFile(e.target.files&&e.target.files[0]); e.target.value=''; };
+            fl.onchange=function(e){ photoHandleFile(e.target.files&&e.target.files[0]); e.target.value=''; };
+            photoPruneTemps();
+            /* 完整度即時更新 */
+            var qf = document.getElementById('questionnaireForm');
+            if(qf){
+                qf.addEventListener('input', updateFillPct);
+                qf.addEventListener('change', updateFillPct);
+            }
+            updateFillPct();
+        })();
+
+        // Close Modal and Reset Form
+        function closeModal() {
+            document.getElementById('successModal').classList.add('hidden');
+            document.getElementById('questionnaireForm').reset();
+            photoDataUrl=''; photoStoreKey=''; if(document.getElementById('photoPreview')) photoRender();
+            currentStep = 1;
+            updateProgressUI();
+            document.querySelectorAll('.form-section').forEach((sec, idx) => {
+                if (idx === 0) sec.classList.add('active');
+                else sec.classList.remove('active');
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize UI on load
+        window.onload = function() {
+            applyLanguage();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DDHC SLESpro CRM 系統手冊（會員操作 + AI 技術文件）</title>
+<style>
+  :root{ --ink:#1e293b; --mut:#64748b; --line:#e2e8f0; --pri:#4f46e5; --bg:#f8fafc; }
+  *{ box-sizing:border-box; }
+  body{ font-family:"Microsoft JhengHei","PingFang TC",system-ui,sans-serif; color:var(--ink); background:var(--bg); margin:0; line-height:1.65; }
+  .wrap{ max-width:980px; margin:0 auto; padding:32px 20px 80px; }
+  h1{ font-size:26px; border-bottom:3px solid var(--pri); padding-bottom:10px; }
+  h2{ font-size:20px; margin-top:44px; background:var(--pri); color:#fff; padding:8px 14px; border-radius:8px; }
+  h3{ font-size:16px; margin-top:26px; border-left:4px solid var(--pri); padding-left:10px; }
+  h4{ font-size:14px; margin:18px 0 6px; color:var(--pri); }
+  table{ border-collapse:collapse; width:100%; margin:10px 0; background:#fff; font-size:13px; }
+  th,td{ border:1px solid var(--line); padding:6px 9px; text-align:left; vertical-align:top; }
+  th{ background:#eef2ff; }
+  code{ background:#eef2ff; color:#3730a3; padding:1px 5px; border-radius:4px; font-family:Consolas,monospace; font-size:12.5px; }
+  pre{ background:#0f172a; color:#e2e8f0; padding:12px 14px; border-radius:8px; overflow-x:auto; font-size:12px; line-height:1.5; }
+  pre code{ background:none; color:inherit; padding:0; }
+  .box{ border-radius:8px; padding:10px 14px; margin:10px 0; font-size:13.5px; }
+  .warn{ background:#fef2f2; border:1px solid #fca5a5; }
+  .tip{ background:#f0fdf4; border:1px solid #86efac; }
+  .info{ background:#eff6ff; border:1px solid #93c5fd; }
+  .toc a{ color:var(--pri); text-decoration:none; }
+  .toc li{ margin:3px 0; }
+  .kbd{ border:1px solid #cbd5e1; border-bottom-width:2px; border-radius:4px; padding:0 5px; background:#fff; font-size:12px; }
+  .tag{ display:inline-block; font-size:11px; border-radius:10px; padding:1px 8px; margin-right:4px; }
+  .t-adm{ background:#f3e8ff; color:#7e22ce; } .t-all{ background:#dcfce7; color:#15803d; }
+  .step{ margin:6px 0; }
+  footer{ margin-top:60px; color:var(--mut); font-size:12px; border-top:1px solid var(--line); padding-top:14px; }
+  @media print{ body{ background:#fff; } h2{ -webkit-print-color-adjust:exact; print-color-adjust:exact; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>DDHC SLESpro CRM 系統手冊</h1>
+<p><b>檔案：</b><code>ddhc salespro crm v2.5.html</code>（主程式，需同資料夾放 <code>crm-data.js</code> ＋ <code>crm-auth.js</code>；另設 <code>index.html</code> 總覽入口、<code>candidate_question.html</code> / <code>employer question .html</code> 兩份問卷）　<b>版本：</b>v2.5（2026-10-30 · 第十五輪）　<b>適用：</b>Chrome / Edge 桌面瀏覽器</p>
+<p>本手冊分兩部分：<b>Part A</b> 給員工／會員日常操作用；<b>Part B</b> 給 AI 人工智能或技術人員閱讀 —— 目的是<b>防止上下文或檔案意外丟失後無法重建</b>，任何新的 AI 對話只要先讀 Part B，就能完全掌握系統架構並安全地繼續修改。</p>
+
+<div class="toc">
+<h3>目錄</h3>
+<ol>
+  <li><a href="#a1">Part A · 員工操作手冊</a></li>
+  <li><a href="#a2">A1. 開啟系統與登入</a></li>
+  <li><a href="#a3">A2. 菲傭庫 / 印傭庫 / 黑名單</a></li>
+  <li><a href="#a4">A3. 僱主庫</a></li>
+  <li><a href="#a6">A4. 智能配對引擎</a></li>
+  <li><a href="#a7">A5. 每日跟進</a></li>
+  <li><a href="#a8">A6. WhatsApp 訊息範本（中 / ENG / INDO / Tagalog）</a></li>
+  <li><a href="#a9">A7. 備份・CSV 匯入/匯出</a></li>
+  <li><a href="#a10">A8. 會員登入系統（Admin 專用）</a></li>
+  <li><a href="#a11b">A9. 智能問卷・資料轉換（★ 新增）</a></li>
+  <li><a href="#a11">A10. 常見問題</a></li>
+  <li><a href="#b1">Part B · AI 技術與架構手冊</a></li>
+  <li><a href="#b2">B1. 系統架構總覽</a></li>
+  <li><a href="#b3">B2. 儲存層（localStorage / sessionStorage）</a></li>
+  <li><a href="#b4"><b>2026-10-24 新增 localStorage key：</b><code>wb_kb_templates_en_v1</code>（英文版對答庫範本，與中文版 <code>wb_kb_templates_v1</code> 獨立）｜<code>wb_crm_sync_dir</code>（同步資料夾名稱）｜<code>wb_crm_autosave</code>（是否自動寫出備份，'1'=開）｜<code>wb_crm_sync_at</code>（最後一次與資料夾同步的時間，用於判斷新舊）｜IndexedDB <code>wb_crm_fs</code>（store: handles —— 儲存 FileSystemDirectoryHandle）<br><br>B3. 資料庫 Schema（DB 物件）</a></li>
+  <li><a href="#b5">B4. 枚舉常數總表</a></li>
+  <li><a href="#b6">B5. 程式區塊與函數地圖</a></li>
+  <li><a href="#b7">B6. 資料遷移機制（migrateDB）</a></li>
+  <li><a href="#b8">B7. CSV 匯入/匯出欄位定義</a></li>
+  <li><a href="#b8a">B8. WhatsApp 新分頁機制</a></li>
+  <li><a href="#b9">B9. 修改守則（AI 必讀）</a></li>
+  <li><a href="#b10">B10. 災難復原程序</a></li>
+  <li><a href="#b11">B11. 修訂歷史（十四輪）</a></li>
+  <li><a href="#b12">B12. ★ 第十四輪新增模組架構（智能問卷・個人紀錄）</a></li>
+</ol>
+</div>
+
+<!-- ══════════════ PART A ══════════════ -->
+<h2 id="a1">Part A · 員工操作手冊</h2>
+
+<h3 id="a2">A1. 開啟系統與登入</h3>
+<div class="step">1️⃣ 用 Chrome 或 Edge 直接打開 <code>ddhc salespro crm v2.5.html</code>（雙擊即可，毋須上網）。建議由 <code>index.html</code> 總覽入口進入。</div>
+<div class="step">2️⃣ 登入：開啟後先見到登入閘門（Login Gate）。會員以 <b>電郵 + 密碼</b>登入；新會員可按「註冊」分頁用電郵自行開戶（詳見 <a href="#a10">A8. 會員登入系統</a>）。</div>
+<div class="step">3️⃣ 預設管理員：<code>wilson5200d@gmail.com</code> ／ 密碼 <code>7890uiop</code>。<b class="text-red">首次登入後請即刻改密碼。</b>另有預設會員 <code>kashingmanpower@gmail.com</code> ／ <code>ks123456</code>（普通會員，可見／編輯自己經手嘅記錄）。密碼經 SHA-256 ＋ 每位會員獨立 salt ＋ 800 輪雜湊，明文唔會儲存。</div>
+<div class="box tip">✓ 勾選「記住我」之後，下次開檔會自動登入（同一部電腦）。右上狀態列有「登出」按鈕。</div>
+
+<h3 id="a3">A2. 菲傭庫 / 印傭庫 / 黑名單</h3>
+<ul>
+  <li><b>左側欄</b>：菲傭庫、印傭庫分開兩頁；<b>黑名單</b>係獨立頁，只顯示被標記 ⚠ BLACKLIST 嘅工人（黑名單工人會自動喺菲傭/印傭庫隱藏）。</li>
+  <li><b>搜尋</b>：可搜工人編號（HKID/護照）、英文名、暱稱。</li>
+  <li><b>篩選器</b>：狀態（Find Job / Have Job / Not finding / Need follow up）、工人類別（GOOD / BEST / NO GOOD）、技能標籤（16 個）、<b>西方星座</b>（Aquarius…Capricorn）、<b>中國生肖</b>（Monkey…Goat）。</li>
+  <li><b>新增/編輯工人</b>：填英文名（Full Name）、Ref Number、生日（系統自動顯示星座＋生肖）、五個經驗年數（星馬/台灣中國/中東/香港/其他）、完成合約次數、香港號碼＋印尼/菲律賓號碼、三個日期（Visa 到期 / Termination / 開始搵工日期）、技能 chip（撳一下綠色/取消）。</li>
+  <li><b>工人類別</b>：菲傭／印傭<b>列表已移除盾牌圖示</b>；改類別請到<b>「黑名單」專頁</b>（該頁保留盾牌按鈕）→ 揀 GOOD / BEST / NO_GOOD / BLACKLIST。揀 BLACKLIST <b>必須填原因</b>，原因會永久顯示。</li>
+  <li><b>WhatsApp 按鈕</b>：每行有 <b>HK</b>（香港號碼）同 <b>ID / PH</b>（印尼/菲律賓號碼）兩個綠色按鈕 → 撳咗會<b>開一個新分頁</b>，左邊揀範本或自己打字，右邊按「發送經 WhatsApp」。</li>
+  <li><b>個人紀錄</b>：眼睛按鈕 → 輸出<b>「個人紀錄 Personal Information」</b>（格式同嘉勝網站 <code>/profile/{id}</code> 一致：個人紀錄／家庭背景／工作經驗／工作記錄／一般諮詢）；可勾「顯示敏感欄位」先印出 HKID／護照；工具列有「編輯工作記錄」按鈕。</li>
+</ul>
+
+<h3 id="a4">A3. 僱主庫</h3>
+<ul>
+  <li><b>列表欄位</b>：僱主編號、稱呼＋暱稱、Sales、目前階段、最後對話、客戶等級、跟進日期、跟進事項。（電話已隱藏，用 WhatsApp 按鈕聯絡）</li>
+  <li><b>目前階段</b>（5 個選項）：搵工人中 Finding Helper / 處理中 Processing / 聘請中 Hiring / 已終止 Terminated / 需跟進 Need Follow Up。頂部可按階段篩選。</li>
+  <li><b>客戶等級</b>：新客 / 常客 / 麻煩客 / VIP / 轉介 / <b>爭緊錢</b>。</li>
+  <li><b>跟進日期＋跟進事項</b>：填咗之後會出現喺「每日跟進」同列表。</li>
+  <li><b>僱主編號可以改</b>（編輯頁第一欄），改名後 Job Order 同發送紀錄自動同步。</li>
+  <li><b>WhatsApp</b>：稱呼旁邊綠色按鈕 → 同工人一樣開新分頁（顯示用暱稱）。</li>
+  <li><b>Sales 篩選</b>：右上「我的客戶」按鈕一鍵篩選自己負責嘅僱主。</li>
+</ul>
+
+<h3 id="a6">A4. 智能配對引擎</h3>
+<div class="box warn"><b>⚠ 2026-10-25 更新：Job Order（職位訂單）模組已移除。</b>配對工作全部集中喺「智能配對引擎」處理。舊有 Job Order 資料仍然保留喺 JSON 備份檔內（<code>DB.matchings</code>），只係介面唔再顯示，唔會因為更新而遺失資料。</div>
+<ul>
+  <li><b>步驟 1 — 揀僱主</b>：下拉選單分兩組（<b>搵工人中</b> / 其他僱主）。揀咗之後會顯示該僱主嘅需求標籤、可接受國籍、備註。撳 <b>「套用僱主條件」</b> 可一次過把佢嘅需求標籤變成評分條件（國籍只有一個時會自動套用國籍篩選）。</li>
+  <li><b>步驟 2 — 加權評分條件（多選 chip）</b>：
+    <ul>
+      <li><b>技能標籤</b>：<b>全部 16 個</b>（不放假／湊BB／湊小朋友／照顧老人／嚴重病患／特殊小孩／照顧狗／照顧貓／洗車／揸車／男家傭／男僱主／可同房／要有房／共享工作／煮餸好）。</li>
+      <li><b>語言能力</b>：廣東話（一般或良好即算符合）／普通話（良好）／英文（良好）。</li>
+    </ul>
+  </li>
+  <li><b>步驟 3 — 硬性篩選條件</b>（唔符合就完全唔會出現）：
+    <table>
+    <tr><th>條件</th><th>說明</th></tr>
+    <tr><td>國籍</td><td>菲律賓／印尼／其他</td></tr>
+    <tr><td>教育程度（最低）</td><td>中學 &lt; 職業訓練 &lt; 大專 &lt; 大學</td></tr>
+    <tr><td>西方星座 / 中國生肖</td><td>12 星座 ＋ 12 生肖（由生日自動計）</td></tr>
+    <tr><td>婚姻狀況</td><td>未婚／已婚／離婚／喪偶／單親／未婚伴侶／分居</td></tr>
+    <tr><td>子女</td><td>有子女／無子女</td></tr>
+    <tr><td>語言最低要求</td><td>英文／廣東話／普通話 各設最低等級</td></tr>
+    <tr><td>Visa 最少剩餘日數</td><td>例如填 90 → 只顯示 Visa 仲有 90 日以上嘅工人</td></tr>
+    <tr><td>完成合約次數（最少）</td><td>例如填 2 → 只顯示做過 2 個或以上合約</td></tr>
+    <tr><td>各地經驗（最少年數）</td><td>星馬／台灣中國／中東／香港／其他國家 各設最少年數</td></tr>
+    <tr><td>年齡範圍 / 最少經驗年數</td><td>原有條件，保留</td></tr>
+    </table>
+  </li>
+  <li><b>★「有工做」＋ Visa 140 日規則</b>：預設<b>開啟</b>。狀態係「有工做」而 <b>Visa 到期日距今 140 日內</b>（或已過期 140 日內）嘅工人<b>都會出現</b>喺配對結果，方便提早跟進續約／轉工。天數可以自行改（例如改成 60 日）。取消勾選就會完全排除所有「有工做」工人。</li>
+  <li><b>結果卡片</b>：每張卡顯示匹配度百分比、符合／不符嘅條件清單，以及教育、婚姻、子女、語言、各地經驗、完成合約次數、星座生肖、Visa 到期狀態（剩餘日數／已過期／無日期）。</li>
+  <li><b>候選名單</b>：撳「加入候選」後，候選會出現喺結果上面嘅名單，每個候選都有 <b>WA HK／WA PH・ID</b> 按鈕（直接開 WhatsApp 分頁）、查看履歷、移除。名單可用「複製名單」按鈕 copy 成文字，並且<b>會儲存落瀏覽器</b>（重新開檔唔會唔見）。</li>
+  <li><b>永遠被排除</b>：狀態「唔搵工」嘅工人，以及<b>黑名單</b>工人。</li>
+</ul>
+
+<h3 id="a7">A5. 每日跟進</h3>
+<ul>
+  <li><b>今天要處理</b>列表：每行有人名 / 跟進事項 / 跟進日期。</li>
+  <li><b>外傭</b> = Visa 到期日 ＋ 生日（<b>生日只計月日、唔會逾期</b>，生日前 3 天開始提醒）。</li>
+  <li><b>僱主</b> = 跟進日期 ＋ 跟進事項。</li>
+  <li>每行按鈕：<b>📁 檔案</b>＝直接開啟嗰個人嘅編輯頁；<b>WA</b>＝開 WhatsApp 分頁；僱主另有「標記已跟進」。</li>
+  <li>做完嘅事項打勾，可以「查看已完成」；記事板可加便利貼。</li>
+</ul>
+
+<h3 id="a8">A6. WhatsApp 訊息範本（中 / ENG / INDO / Tagalog）</h3>
+<ul>
+  <li><b>單一「WhatsApp」模組</b>（左欄新名），內嵌 <b>中 / ENG / INDO / Tagalog</b> 四個語言按鈕切換子板塊。舊嘅「WA 客人標準對答（中文）」同「WA 標準對答 (EN)」兩個獨立標籤已合併。</li>
+  <li><b>中</b>板塊預載 <b>50 條內建中文範本</b>；<b>ENG / INDO / Tagalog</b> 三個板塊<b>空白起步</b>（界面文字用英文，內容留待自行填寫），各自獨立 localStorage 範本庫。</li>
+  <li>每個語言板塊都有：<b>搜尋框</b>（搜範本／關鍵字，只重繪清單、唔會失焦 —— 修復舊版搜尋框無反應）、<b>＋新增範本</b>、<b>還原預設</b>、複製 / 發送 / 編輯 / 刪除。</li>
+  <li><b>發送對象按語言區分</b>：<b>中 / ENG</b> 發送時<b>揀僱主</b>；<b>INDO / Tagalog</b> 發送時<b>揀 Helper</b>（INDO 選印尼傭、Tagalog 選菲律賓傭）。舊嘅「揀僱主自動跳階段分類」邏輯已移除（範本不再有階段分類）。</li>
+  <li><b>「還原預設」只適用於「中」板塊</b>：會補回被刪走嘅 50 條內建中文範本。ENG / INDO / Tagalog 按設計<b>無內建內容</b>，按「還原預設」唔會注入任何英文／其他語言範本，只會維持你現有嘅自訂內容。</li>
+</ul>
+
+<h3 id="a9">A7. 備份・CSV 匯入/匯出</h3>
+<table>
+<tr><th>功能</th><th>用法</th><th>何時用</th></tr>
+<tr><td><b>匯出 JSON</b></td><td>備份頁「立即匯出 JSON」（左欄底部都有）</td><td><b>每星期至少一次</b>；完全備份（含全部資料＋範本＋帳戶）</td></tr>
+<tr><td><b>還原 JSON</b></td><td>揀備份檔 → 確認（會完全取代現有資料）</td><td>換電腦 / 資料出事時</td></tr>
+<tr><td><b>匯入 CSV</b></td><td>揀「菲傭/印傭」或「僱主」→ 揀 CSV 檔 → 核對欄位對映 → 開始匯入</td><td>大量新增/更新</td></tr>
+<tr><td><b>匯出 CSV</b></td><td>CSV 卡片「匯出 CSV」按鈕（跟隨上面揀嘅類別）</td><td>交俾其他系統 / 做二次備份</td></tr>
+</table>
+<div class="box warn">⚠ CSV 匯入唔支援 .xlsx，請先喺 Excel「另存為 CSV (UTF-8)」。重複編號可以揀「跳過」或「覆蓋」。</div>
+<div class="box tip">✓ 系統每次修改都會自動存草稿＋自動保留最近 3 個快照，但<b>自動備份唔等於真正備份</b> —— 請定期匯出 JSON 存去公司硬碟/雲端。</div>
+
+<h3 id="a10">A8. 會員登入系統（Admin 專用）</h3>
+<div class="box info">💡 <b>取代舊「員工管理」</b>：帳戶改以 <b>電郵</b> 做唯一識別碼，角色只有兩種 —— <b>Admin（管理員）</b> 與 <b>Member（普通會員）</b>。密碼經 SHA-256 ＋ per-member salt ＋ 800 輪雜湊，<b>明文絕不儲存</b>於 DB 或匯出 JSON。</div>
+<div class="step">1️⃣ 用 <b>Admin</b> 帳戶登入 → 左欄「系統設定・會員」。</div>
+<div class="step">2️⃣ <b>Admin 開戶</b>：填電郵 / 姓名 / 手機 / 部門 / 緊急聯絡人 / 權限（Admin 或 Member）；密碼可留空 ＝ 會員首次登入時自行設定。</div>
+<div class="step">3️⃣ <b>會員自行註冊</b>：登入閘門「註冊」分頁 → 填電郵＋密碼＋完整會員檔案 → 自動批准、即刻可用。</div>
+<div class="step">4️⃣ <b>擁有權</b>：Member 只可新增及修改「自己經手」的記錄（helpers / employers 的 <code>ownerEmail</code> ＝ 自己）；Admin 可改全部。無法改他人擁有的記錄。</div>
+<div class="step">5️⃣ <b>停用 / 啟用 / 改角色 / 重設密碼 / 改聯絡資料</b>：管理頁操作；停用後該會員不能再登入。系統至少保留一個 Admin。</div>
+<div class="box info">普通 Member 登入時，「會員管理」頁只顯示唯讀名單，無法新增／停用／改密碼。</div>
+
+<h3 id="a11b">A9. 問卷系統（外部問卷 ＋ CRM 內部智能問卷）</h3>
+<div class="box tip">💡 <b>外部問卷（主要流程）</b>：候選人／僱主填寫獨立 HTML 問卷 → 系統產生<b>匯入碼</b>並自動開啟 CRM 把資料帶入；彈出視窗被封鎖時可複製匯入碼、喺 CRM 對應分頁點「Import Candidate / Import Employer」貼上。問卷與 CRM 完全分離，填寫唔會改動 CRM 資料。</div>
+<h4>① 候選人問卷（candidate_question.html）</h4>
+<table>
+<tr><th>項目</th><th>說明</th></tr>
+<tr><td>步驟</td><td><b>8 步</b>（badge 純數字 1–8），第 <b>8 步為相片上傳</b>且<b>必填</b></td></tr>
+<tr><td>品牌</td><td>標題與 logo 為 <b>DAO</b>（不再是 DDHC）；標題公司名會自動讀取 CRM 的 <code>meta.companyName</code></td></tr>
+<tr><td>相片</td><td>上載或拍攝 → 自動壓縮成 <b>330×440 JPEG（約 20KB）</b>，載入快、慳空間；相片經 localStorage key 傳入 CRM（匯入碼唔會膨脹）</td></tr>
+<tr><td>完整度門檻</td><td>低於 <b>50%</b> 欄位填寫 → 提交時彈窗攔截，必須補齊至 50% 以上方可提交</td></tr>
+<tr><td>匯入 CRM</td><td>成功頁產生「匯入碼」，自動開啟 <code>ddhc salespro crm v2.5.html#cand=</code> → 登入後跳去對應國籍分頁並預填「新增工人」表單</td></tr>
+</table>
+<h4>② 僱主問卷（employer question .html）</h4>
+<table>
+<tr><th>項目</th><th>說明</th></tr>
+<tr><td>步驟</td><td>8 步招聘需求問卷（家庭背景、居住環境、工作內容、國籍偏好等），<b>31 個可填欄位</b></td></tr>
+<tr><td>完整度門檻</td><td>同樣設 <b>50%</b> 門檻；<code>maritalPref</code> 已修正互斥（單身／已婚／無所謂）</td></tr>
+<tr><td>匯入 CRM</td><td>產生 <code>#emp=</code> 匯入碼 → 自動開啟 CRM 僱主庫並預填「新增僱主」表單（PRD 流程1：僱主問卷回傳 CRM）</td></tr>
+</table>
+<h4>③ CRM 內部「智能問卷・資料轉換」模組</h4>
+<ul>
+<li>CRM 左欄仍有 <b>「智能問卷・資料轉換」</b> 模組（第十四輪新增）：揀工人／手動輸入姓名＋電話 → 產生<b>固定 41 題問卷</b> → 經 WhatsApp 新分頁發送 → 貼上回覆 → 智能解析 → 寫入資料庫（見 <a href="#b12">B12</a>）。</li>
+<li>兩條路徑共用同一套「匯入碼 → CRM 預填」邏輯；外部問卷為首選（與 CRM 解耦、易於分發）。</li>
+</ul>
+
+<h3 id="a11">A10. 常見問題</h3>
+<table>
+<tr><th>問題</th><th>解決</th></tr>
+<tr><td>WhatsApp 分頁冇彈出嚟</td><td>瀏覽器封鎖咗彈出視窗 → 允許本檔案 Pop-up；或者喺 WhatsApp 分頁手動改號碼後發送。</td></tr>
+<tr><td>撳錯嘢想復原</td><td>按 <span class="kbd">Ctrl</span>+<span class="kbd">Z</span>（可退 20 步）。</td></tr>
+<tr><td>資料唔見咗／換電腦</td><td>喺新電腦開 <code>ddhc salespro crm v2.5.html</code> → 備份頁 → 還原 JSON（用最近一次匯出嘅備份檔）。睇 B10 災難復原。</td></tr>
+<tr><td>介面語言／深色模式</td><td>左欄頂部：中文 / English ＋ Dark Mode。</td></tr>
+<tr><td>工人喺菲傭/印傭庫搵唔到</td><td>可能被標記咗 BLACKLIST → 去左欄「黑名單」頁搵。</td></tr>
+<tr><td>問卷解析出嚟嘅值唔啱</td><td>檢核表<b>逐格可以改</b>，改完先按「確認寫入資料庫」；或直接用菲/印傭庫嘅編輯頁修正。</td></tr>
+<tr><td>個人紀錄某個欄位係「—」</td><td>該欄位資料未填。可用「編輯工作記錄」補工作記錄；其他欄位去菲/印傭庫編輯頁嘅「個人紀錄」分區補。</td></tr>
+</table>
+
+<!-- ══════════════ PART B ══════════════ -->
+<h2 id="b1">Part B · AI 技術與架構手冊（AI 人工智能必讀）</h2>
+<div class="box warn"><b>給 AI 的指令：</b>如果工作階段(context)或檔案丟失，先完整閱讀本部分再動手。修改任何代碼前必須遵守 <a href="#b9">B9 修改守則</a>。禁止重新由零建立系統 —— 只可喺現有檔案上漸進修改。</div>
+
+<h3 id="b2">B1. 系統架構總覽</h3>
+<ul>
+  <li><b>主程式 + 兩個 companion 檔</b>：<code>ddhc salespro crm v2.5.html</code>（主程式，約 3,000+ 行）＋ <code>crm-data.js</code>（I18N／字典／對照表／知識庫，只放資料）＋ <code>crm-auth.js</code>（會員登入系統）。三個檔必須放同一資料夾，<code>crm-data.js</code> 與 <code>crm-auth.js</code> 經相對路徑 <code>&lt;script src&gt;</code> 載入。無框架、無 build step（只有 Tailwind CDN 與 Lucide Icons 兩個 &lt;script src&gt;）。<b>⚠ CDN 被擋／離線時必須仍可操作</b>：Tailwind 用 <code>typeof tailwind !== 'undefined'</code> 防護；Lucide 用 <code>refreshIcons()</code>（內含 try/catch + <code>__lucideFallback()</code> 文字替代）。<b>絕對唔可以直接呼叫 <code>lucide.createIcons()</code></b> —— 佢一 throw 就會令 render 函式中斷，之後嘅事件綁定全部漏做（表單按鈕「冇反應」＝用戶見到嘅「閃退」）。</li>
+  <li><b>資料單一真相</b> = 記憶體 <code>DB</code> 物件，修改後經 <code>saveDraft()</code> 寫入 <code>localStorage['wb_crm_draft']</code>。唔直接改 DOM 資料。</li>
+  <li><b>渲染模式</b>：每個模組一個 <code>render*()</code> 函式，將 HTML 字串塞入對應容器（<code>dataBody / matchBody / followBody / waBody / importBody / settingsBody</code>；WhatsApp 模組另有語言切換列 <code>#waLangBar</code>），再 <code>refreshIcons()</code> + 綁事件。<b>任何資料改動後要 re-render 所在模組</b>。</li>
+  <li><b>★ Job Order 模組已移除（2026-10-25）</b>：左側選單冇咗「Job Order」；<code>renderMatchingTable / openMtForm / applyHireChain / filterMatchings / resultBadge / currentFdhOf / RESULTS</code> 全部刪走。<code>DB.matchings</code> 欄位<b>仍然保留</b>喺 Schema（唔會破壞現有 JSON 備份／還原），只是介面唔再讀寫。舊用戶 <code>PREFS.mod==='data-mt'</code> 會喺 <code>switchMod()</code> 及 <code>migrateDB()</code> 雙重自動跳去僱主庫。</li>
+  <li><b>兩語 i18n</b>：<code>I18N = { zhHant:{...}, en:{...} }</code>，取詞 <code>t('key.path')</code>，枚舉翻譯 <code>td('CODE')</code>（查 <code>dic.CODE</code>）。<b>新增任何顯示文字必須兩語同時加</b>（ WhatsApp 訊息範本除外 —— 中板塊純中文、ENG/INDO/Tagalog 板塊另行維護，四語言各自獨立範本庫）。<br><b>缺鍵 fallback 機制</b>（<code>t()</code> 內建）：<code>CUR_LANG</code> → <code>I18N.en</code> → 鍵名。語言切換鈕為 1×2 網格（2 個）。<br><b>Tagalog（2026-10-24 移除）與 Indonesia（2026-10-25 移除）</b>已全部清除，<b>唔好加返</b>。<code>applyLang()</code> 內有遷移：若 <code>PREFS.lang</code> 係已不存在嘅語言（舊值 <code>'tl'</code> 或 <code>'id'</code>）會自動回退 <code>'zhHant'</code>。<br><b>注意</b>：「印傭／印尼傭」係<b>工人國籍</b>（<code>nationality:'ID'</code>），同「Indonesia 介面語言」係兩回事 —— 國籍相關嘅 <code>dic.ID</code>／<code>tab.id</code> 等翻譯<b>要保留</b>。</li>
+  <li><b>Undo</b>：<code>pushUndo()</code>（任何寫入動作前必須呼叫）→ <code>undoStack</code> 最長 20 步 → <span class="kbd">Ctrl</span>+<span class="kbd">Z</span> → <code>doUndo()</code>，持久化到 <code>wb_crm_undo</code>。<b>⚠ 快照只存「會影響資料」的欄位</b>（<code>undoSnapshot()</code>：helpers/employers/matchings/notes/completedReminders/sendLog/meta），<b>唔好存全份 DB</b> —— 全份 DB × 20 步會令 localStorage 爆配額（見 B2 配額管理）。</li>
+  <li><b>UI 偏好</b>（<code>PREFS</code>：語言/深色/分頁/篩選）存 <code>wb_crm_prefs</code>，與業務資料分離。</li>
+</ul>
+
+<div class="box warn"><b>⚠ WhatsApp 模組搜尋框嘅陷阱（B9 守則延伸）：</b>「搜尋範本」輸入時，<b>絕對唔可以整體重繪 <code>renderWA()</code></b> —— 否則輸入框會被重建並失去焦點，令使用者以為「搜尋框冇反應」。<b>正確做法</b>：<code>renderWA()</code> 只負責畫一次外框（語言列＋搜尋框＋清單容器），搜尋輸入只呼叫 <code>updateWaList(lang)</code> 重繪清單部分，輸入框保留焦點。每個語言板塊嘅範本經 <code>kbTplKey(lang)</code> 存入各自獨立嘅 localStorage key（<code>wb_kb_templates_v1 / _en_v1 / _indo_v1 / _tag_v1</code>），彼此唔會互相覆蓋。</div>
+
+<h3 id="b3">B2. 儲存層（localStorage / sessionStorage）</h3>
+<table>
+<tr><th>Key</th><th>內容</th><th>寫入時機</th></tr>
+<tr><td><code>wb_crm_draft</code>（DB_KEY）</td><td>整個 DB JSON（唯一真相）</td><td>saveDraft()（markChange() 內）</td></tr>
+<tr><td><code>wb_crm_backups</code>（BAK_KEY）</td><td>自動快照 ×3</td><td>autoBackup()（匯入/重大變更後）</td></tr>
+<tr><td><code>wb_crm_undo</code>（UNDO_KEY）</td><td>undo 堆疊</td><td>pushUndo()</td></tr>
+<tr><td><code>wb_crm_prefs</code>（PREF_KEY）</td><td>UI 偏好</td><td>savePrefs()</td></tr>
+<tr><td><code>wb_crm_map</code>（MAP_KEY）</td><td>CSV 欄位對映記憶</td><td>saveCsvMap()</td></tr>
+<tr><td><code>wb_crm_user</code></td><td>記住我（登入名稱）</td><td>doLogin()</td></tr>
+<tr><td><code>wb_crm_user</code>（sessionStorage）</td><td>目前 session 登入名稱</td><td>doLogin()</td></tr>
+<tr><td><code>wb_kb_templates_v1</code> / <code>_en_v1</code> / <code>_indo_v1</code> / <code>_tag_v1</code></td><td>WhatsApp 範本（四語言各一庫：中/ENG/INDO/Tagalog；主程式與 WhatsApp 分頁共用）</td><td>範本增刪改時</td></tr>
+<tr><td><code>wb_sendlog_pending_v1</code>（SLOG）</td><td>WhatsApp 分頁待回流發送紀錄</td><td>分頁發送時寫、mergePendingSends() 合併後清</td></tr>
+</table>
+<div class="box warn">⚠ 清瀏覽器資料 = 清空資料庫！唯一安全網係匯出嘅 JSON/CSV 備份檔。檔案本身（HTML）<b>已無內建示範數據</b>（2026-10-25 移除）—— 新裝用戶開啟即空白系統，請用「備份・CSV 匯入」載入資料，或逐筆輸入。</div>
+
+<div class="box info"><b>⚠ localStorage 配額管理（2026-10-24 新增 · 解決「新增資料閃退 / 資料靜默遺失」）</b><br>
+Chrome localStorage 上限約 <b>5–10MB</b>。實測 716 筆外傭 + 317 筆僱主時：<code>wb_crm_draft</code> ≈ 930KB，若 <code>pushUndo()</code> 每步存<b>全份 DB</b>，20 步就 ≈ 18MB → <b>爆配額</b>。後果：<br>
+① <code>saveDraft()</code> setItem 失敗 → <b>新資料靜靜遺失</b>（畫面見到但重新載入冇咗）<br>
+② <code>savePrefs()</code> setItem 失敗 → 拋未捕捉例外 → <code>switchMod()</code> 中斷 → <b>介面完全冇反應（＝用戶講嘅「閃退」）</b><br>
+③ Undo 堆疊寫唔入 → 快照「過期」→ Ctrl+Z 還原到舊狀態，<b>反而再遺失一批新資料</b><br>
+<b>現時做法</b>：<br>
+• <code>lsSet(key, val)</code> —— 統一安全寫入；失敗自動 <code>lsMakeRoom()</code> 騰空間再試<br>
+• <code>lsMakeRoom()</code> —— 先清走多餘 Undo 快照，再清自動備份（各保留最新一份）<br>
+• <code>savePrefs()</code> / <code>saveDraft()</code> / <code>kbTplSave()</code> 全部經 <code>lsSet()</code>，<b>唔可以再直接用 <code>localStorage.setItem</code></b><br>
+• <code>undoSnapshot()</code> —— 只存業務欄位；Undo 堆疊總量封頂 <b>2MB</b><br>
+• <code>autoBackup()</code> —— 3 份自動備份總量封頂 <b>1.5MB</b><br>
+• <code>saveDraft()</code> 最後會清走 Undo + 備份再試一次；仍然失敗就<b>彈紅色警告</b>叫用戶立即匯出 JSON</li></div>
+
+<h3 id="b4">B3. 資料庫 Schema（DB 物件）</h3>
+<pre><code>DB = {
+  schemaVersion: '1.0',
+  meta: { companyName, createdAt, dirty, lastExportedAt, loginPin(舊，只作遷移預設密碼用) },
+  helpers: [          // 菲傭＋印傭合一，用 nationality:'PH'|'ID'|'OTHER' 區分；每筆記錄含 ownerEmail（經手會員電郵，MEMBER 只可改自己擁有嘅）
+    { code /*=HKID或護照，6-7位；無則9開頭暫用編號*/, engName /*Full Name*/, nickname,
+      nationality, birth, marital, children, education, expYears,
+      contract /*FIND_JOB|HAVE_JOB|NOT_FINDING|FOLLOW_UP*/, workerClass /*GOOD|BEST|NO_GOOD|BLACKLIST*/,
+      classReason, classAt, phoneHK, phoneIndo, phonePH, findJobDate, contractDone,
+      expSGMY, expTWPRC, expME, expHK, expOther,
+      skills:[SKILLS...] /* 16 個：S_NOHOLIDAY/S_NEWBORN/S_TODDLER/S_ELDERLY/S_ILLNESS/S_SPECIAL/S_DOG/S_CAT/S_WASHCAR/S_DRIVING/S_MALEHELPER/S_MALEEMP/S_NOROOM/S_OWNROOM/S_SHAREJOB/S_GOODCOOK */, langEn, langCt, langPtn, hkid, passport, refNo,
+      visaExpiry, termination, contractExpiry, airportPickup, hkidAppt, arrivalHK, handover, notes,
+      /* ★ 第十四輪：網站「個人紀錄」對應欄位 */
+      maidType /*OVERSEAS|LOCAL|TRANSFER*/, religion /*CHRISTIAN|CATHOLIC|MUSLIM|BUDDHIST|HINDU|OTHER*/,
+      height /*cm*/, weight /*kg*/, spouseName, siblingCount, spouseOccupation,
+      childrenDetail: [ {g:'SON'|'DAUGHTER', count, ages:[…]} ],
+      workHistory: [ {location, period, houseSize, persons, holiday, noMaid, salary, reason,
+                      duties:[{k:'baby'|'child'|…, note}], remark} ],
+      generalQA: { weekdayHoliday, pork, petCare, homework, backHome, tattoo, medicine, hypertension }, // YES|NO
+      profileExp: ['baby','child','elder','sick','cook','house','pet'],   // 網站「有經驗」勾選
+      dutiesPriority: ['baby','elder','pet','child','sick','cook'],        // 網站「工作意向」勾選
+      expID /*印尼經驗年數*/, expMY /*馬來西亞經驗年數*/ } ],
+  employers: [
+    { code /*EM...，可改名*/, refCode, refCodeOld, salutation*必填, erNameZh, nickname,
+      phone, whatsapp, family, expectDate /*=跟進日期*/, followUp /*跟進事項*/,
+      source /*自由文字*/, level /*LEVELS*/, sales /*=DB.members[].name*/,
+      stage /*ESTAGES 5階段*/, lastContact, needs:[], acceptedNat:[], notes } ],
+  matchings: [ { id, empCode, fdhCode, interviewDate, result, signDate, commission, notes } ],
+                 // ⚠ 已退役（2026-10-25 Job Order 模組移除）；欄位保留為 legacy，只為相容舊備份檔
+  notes: [ { id, text, pinned, done, due, createdAt, updatedAt } ],   // 記事板
+  completedReminders: { reminderKey: 完成時間 },   // 已完成嘅跟進提醒（key 含日期，過期自動失效）
+  sendLog: [ { id, empCode, fdhCode, name, phone, msg, at, status } ],
+  members: [ { id /*M0001*/, email /*登入用，唯一*/, name, phone, dept, emergency, emergencyPhone, pwdHash /*SHA-256+salt+800輪*/, pwdSalt, role /*'ADMIN'|'MEMBER'*/, status /*active|disabled*/ } ],   // 會員登入帳戶（取代舊 staff；明文密碼絕不儲存）
+  recommendations: [ { empCode, fdhCode, fdhName, at, by } ],   // 推薦紀錄（PRD 流程4：邊個僱主推薦過邊個外傭，防重複）
+  /* 相片：唔存在 DB 物件，而係 localStorage key wb_crm_photo_<code> 存 330×440 JPEG data URL；匯出 JSON 時由 photoAll() 合併入 obj.photos */
+  surveys: [ { id, at, name, phone, helperCode, status /*sent|parsed|saved*/, qText, reply } ], // ★第十四輪：問卷紀錄（上限 30）
+  holidays: { "2027":[{date,zh,en,id}...] }        // 香港法定假日
+}</code></pre>
+
+<h3 id="b5">B4. 枚舉常數總表（定義於 Script 3 頂部，勿移位）</h3>
+<table>
+<tr><th>常數</th><th>值</th><th>注意</th></tr>
+<tr><td><code>CONTRACTS</code></td><td>FIND_JOB / HAVE_JOB / NOT_FINDING / FOLLOW_UP</td><td>舊碼經 <code>CONTRACT_MIGRATE</code> 自動遷移</td></tr>
+<tr><td><code>WCLASS</code></td><td>GOOD / BEST / NO_GOOD / BLACKLIST</td><td>BLACKLIST 自動喺菲/印傭庫隱藏、喺黑名單頁顯示；<b>必須定義喺 CSV_FIELDS_FDH 之前</b>（TDZ）</td></tr>
+<tr><td><code>LEVELS</code></td><td>NEW / REGULAR / DIFFICULT / VIP / REFERRAL / OUTSTANDING(爭緊錢)</td><td>—</td></tr>
+<tr><td><code>ESTAGES</code></td><td>FINDING / PROCESSING / HIRING / TERMINATED / FOLLOW_UP</td><td>僱主「目前階段」；舊 ST1–ST20 經 <code>ESTAGE_MIGRATE</code> 遷移</td></tr>
+<tr><td><code>KB_LANGS</code></td><td>中(zh) / ENG(en) / INDO(indo) / Tagalog(tag) 四語言；每個帶 <code>ui</code>（界面文案語系）、<code>seed</code>（是否自動種子內建）、<code>send</code>（發送對象 emp/helper）、<code>nat</code>（helper 國籍 ID/PH）</td><td>舊 KB_GROUPS 階段分類已於 v2.5 移除；範本改為按語言分庫，不再有 grp 分類</td></tr>
+<tr><td><code>STAGES</code></td><td>ST1–ST20</td><td>知識庫內部話術階段（BKB 條目用 <code>stage:'STx'</code> 標記）</td></tr>
+<tr><td><code>SKILLS</code></td><td>S_NEWBORN / S_TODDLER / S_ELDERLY / S_ILLNESS / S_SPECIAL / S_PET / S_HOUSEWORK</td><td>技能 chip；CSV 中以 <code>;</code> 分隔</td></tr>
+<tr><td><code>PAGE_SIZE</code></td><td>50</td><td>所有列表每頁筆數</td></tr>
+<tr><td><code>MAID_TYPES</code></td><td>OVERSEAS / LOCAL / TRANSFER</td><td>傭工類型（Type of maid）</td></tr>
+<tr><td><code>RELIGIONS</code></td><td>CHRISTIAN / CATHOLIC / MUSLIM / BUDDHIST / HINDU / OTHER</td><td>宗教（Religion）</td></tr>
+<tr><td><code>SURVEY_QUESTIONS</code></td><td>41 題（n / key / zh / en / type / alias）</td><td>★第十四輪：固定格式問卷定義</td></tr>
+<tr><td><code>PROFILE_EXPERIENCE</code></td><td>7 項（baby/child/elder/sick/cook/house/pet）</td><td>★網站「有經驗」勾選框</td></tr>
+<tr><td><code>PROFILE_PRIORITY</code></td><td>6 項（baby/elder/pet/child/sick/cook）</td><td>★網站「工作意向」勾選框</td></tr>
+<tr><td><code>WORK_DUTIES</code></td><td>14 項</td><td>★網站工作記錄嘅 14 個工作內容勾選框</td></tr>
+<tr><td><code>PROFILE_COUNTRIES</code></td><td>8 個地區</td><td>★網站「地區工作經驗」</td></tr>
+<tr><td><code>GENERAL_QA</code></td><td>8 條</td><td>★網站「一般諮詢」</td></tr>
+<tr><td><code>SKILL_KEYWORDS</code></td><td>16 個技能碼 × 關鍵字</td><td>★問卷技能解析用（順序敏感）</td></tr>
+<tr><td><code>PROF_T</code> / <code>PROF_BI</code></td><td>中英標題 / 中英值</td><td>★個人紀錄輸出用（固定中英，唔隨介面語言）</td></tr>
+</table>
+
+<h3 id="b6">B5. 程式區塊與函數地圖（15 個 &lt;script&gt; blocks）</h3>
+<table>
+<tr><th>#</th><th>註解標題</th><th>重要內容</th></tr>
+<tr><td>1</td><td>I18N 兩語字典</td><td>I18N、t()、td()；<b>新增文字中英都要加</b></td></tr>
+<tr><td>2</td><td>DB / Store / Utils</td><td>常數（B4 全部）、esc/toNum/fmtDate/uid/todayStr/debounce/normPhone/stdSales/isValidIdNum/isValidPassport/nextProvCode</td></tr>
+<tr><td>3</td><td>資料初始化 + UI 骨架</td><td>seedIfEmpty()（空白起步）、renderStatusBar()、switchMod()、paginate/th/pagerHTML、SKILLS chip（16 個）</td></tr>
+<tr><td>4</td><td>數據表管理（外傭庫）</td><td>LIST_STATE、filterHelpers（BLACKLIST 隱藏＋三篩選器）、renderFDHTable、openFdhForm（zodiacPreview 即時星座生肖、技能 chip 為<b>純 div onclick</b>，唔好用 hidden checkbox）、openFdhWADialog → openWATab、openFdhDetail、黑名單頁 renderBlacklist</td></tr>
+<tr><td>5</td><td>僱主庫</td><td>filterEmployers、renderEmployerTable（電話隱藏、跟進事項欄）、openEmpForm（編號可編輯＋重複檢查）、openEmpDetail、openEmpWADialog → openWATab</td></tr>
+<tr><td>6</td><td>數據表管理模組分頁調度</td><td>renderDataModule（Job Order 已移除；<code>DB.matchings</code> 保留為 legacy）</td></tr>
+<tr><td>7</td><td>智能配對引擎</td><td><b>MATCH_CONDS</b>（16 技能 chip + 3 語言）、<b>MATCH_STATE</b>（全部篩選條件集中管理）、<b>EDU_RANK / LANG_RANK</b>（等級比較）、<b>EXPIRING_DEFAULT_DAYS=140</b>（「有工做」＋Visa 140 日規則）、<b>runMatching</b>（硬性篩選 + 加權評分）、<b>renderCands</b>（候選名單：WA 按鈕 + 複製 + 持久化 <code>wb_crm_cands</code>）、<b>loadCands / saveCands / fallbackCopy</b></td></tr>
+<tr><td>8</td><td>每日跟進</td><td>computeReminders（外傭=visaExpiry 60日+birthday 前3日不逾期；僱主=expectDate+followUp；bdayDue() 只計月日）、renderFollow（人名/跟進事項/跟進日期 + 📁檔案 + WA 按鈕）</td></tr>
+<tr><td>9</td><td>（已清空）</td><td>大量訊息模組已刪除；<code>currentFdhOf()</code> 亦隨 Job Order 一併移除</td></tr>
+<tr><td>10</td><td>履歷列印</td><td>openResume/drawResume（A4、敏感資料開關）</td></tr>
+<tr><td>11</td><td>CSV 匯入/匯出 + 設定</td><td>CSV_FIELDS_FDH / CSV_FIELDS_EMP、parseCSV/loadCSV/validateCSV/doImport/exportCSV、renderSettings + renderMemberListAdmin（crm-auth.js，Admin 限定）、openWarningModal</td></tr>
+<tr><td>11A</td><td>登入 + 遷移（已搬到 crm-auth.js）</td><td><b>crm-auth.js</b>：SESSION{user,email,role,memberId}、isAdmin()、checkMemberLogin/doMemberLogin/doMemberRegister/logoutMember/renderMemberListAdmin/canEditRecord/canDeleteRecord/newOwnerEmail/memberSalesOptions、pwdMake/pwdVerify/pwdSet（SHA-256+salt+800輪）、migrateDB（舊 staff→members 遷移集中喺呢度）</td></tr>
+<tr><td>11B</td><td>WhatsApp 訊息範本</td><td>KB 陣列 50 條（純中文 a.zh 種子化到 中 板塊）、KB_LANGS（四語言）、KB_STATE（每語言獨立 search/recSearch）、renderWA + updateWaList（語言按鈕＋搜尋只重繪清單修復失焦）、openTplEdit（範本增刪改，無 grp 分類）、openKBSend（中/ENG 選僱主；INDO/Tagalog 選 Helper）、openWATab + buildWATabDoc（window.open 自含 HTML，分頁內四語言共用同一 KEYMAP）、mergePendingSends</td></tr>
+<tr><td>12</td><td>Init</td><td>seedIfEmpty → loadUndo → 綁全域事件 → mergePendingSends → checkLogin；window focus 時 mergePendingSends()</td></tr>
+<tr><td><b>14</b></td><td><b>智能問卷・資料轉換</b></td><td><b>★第十四輪新增</b>：<b>renderSurvey</b>（模組 UI）／<b>buildSurveyText</b>（產生 41 題問卷）／<b>parseSurveyReply</b>（解析回覆）／<b>readSurveyInputs</b>／<b>saveSurveyToDB</b>（寫入資料庫）／<b>recordSurvey</b>（發送紀錄）／正規化工具 <b>normYesNo / normNum / normSurveyDate / normTxt / normNat / normMarital / normEdu / normRelig / normLang / normSkills / parseChildrenDetail</b></td></tr>
+<tr><td>10</td><td>個人紀錄（重寫）</td><td><b>★第十四輪重寫</b>：<b>drawResume</b>（輸出網站「個人紀錄」格式）／<b>openWorkHistoryEditor</b>（工作記錄編輯器）／<b>profVal / profZodiacCN / profCzodiacCN / profChildrenText / profLangRow / profWHBlock / dutyCodes / dutyNote</b></td></tr>
+</table>
+
+<h3 id="b7">B6. 資料遷移機制（migrateDB）</h3>
+<p>migrateDB() 每次載入自動執行，負責向下兼容。現有規則（新增欄位時<b>必須喺呢度加遷移</b>）：</p>
+<ul>
+  <li>員工字串陣列 → <code>{name, pwd, role}</code> 帳戶物件；無 Admin 自動補 <code>{name:'Admin', pwd:舊loginPin||'1234', role:'ADMIN'}</code>；缺 pwd 補 '1234'、缺 role 補 'STAFF'。</li>
+  <li>外傭舊 <code>warning.active</code> → <code>workerClass</code>（SERIOUS→BLACKLIST、MINOR→NO_GOOD）。</li>
+  <li>外傭舊合約碼（JO/CJO/WORKING/COMPLETED/TRANSFER/DEPARTED）→ 新 CONTRACTS 四碼。</li>
+  <li>外傭新欄位：phoneHK/phoneIndo/phonePH/findJobDate/contractDone/expSGMY…expOther（舊 phone 8位→phoneHK，其他→phoneIndo）。</li>
+  <li>僱主：refCode/refCodeOld/erNameZh/sales/stage/lastContact/source/followUp 補空；舊 ST1–ST20 → ESTAGES 五階段；舊財務欄（feeTotal/paidAmount/paymentStatus/budget/housing/region/currentFDH/warning）已廢棄，介面不再讀取。</li>
+  <li>DB.templates 已由 schema 移除（知識庫範本改用 localStorage）。</li>
+  <li><b>★第十四輪</b>：外傭新欄位 <code>maidType/religion/height/weight/spouseName/siblingCount/spouseOccupation/childrenDetail/workHistory/generalQA/profileExp/dutiesPriority/expID/expMY</code> 舊草稿自動補預設值（陣列補 <code>[]</code>、物件補 <code>{}</code>、數字補 <code>0</code>、字串補 <code>''</code>）。</li>
+  <li><b>★第十四輪</b>：<code>childrenDetail</code> 若為舊嘅<b>字串</b>（如 <code>"Son 2 (4,9)"</code>）→ 自動用 <code>parseChildrenDetail()</code> 轉成 <code>[{g,count,ages}]</code> 陣列；可重複執行。</li>
+  <li><b>★第十四輪</b>：<code>DB.surveys</code> 缺失時補空陣列（問卷紀錄）。</li>
+</ul>
+
+<h3 id="b8">B7. CSV 匯入/匯出欄位定義</h3>
+<ul>
+  <li>定義喺 <code>CSV_FIELDS_FDH</code> / <code>CSV_FIELDS_EMP</code>（Script 11），每欄 <code>{k, req?, type?:'date'|'num'|'id', names:{zhHant,en}}</code>；匯入時標題列中英任一相符即自動對映。</li>
+  <li>FDH 編號規則：HKID（6–7 純數字）優先 → 護照（6–12 字母數字）→ 都無就 <code>nextProvCode()</code> 派 9 開頭暫用編號。</li>
+  <li>EMP 重複偵測用 <code>refCode</code>；策略 skip / overwrite。</li>
+  <li>匯出 <code>exportCSV(kind)</code>：首欄 <code>編號/Code</code>，之後按 FIELDS 順序；陣列欄 <code>;</code> 連接；warning 物件攤平做「等級 原因」；UTF-8 BOM。</li>
+  <li>示範匯入檔（同目錄）：<code>indo-helper-import.csv</code>（158 筆印傭）、<code>new-salary-employers-import.csv</code>（1,147 筆僱主）。</li>
+</ul>
+
+<h3 id="b8a">B8. WhatsApp 新分頁機制</h3>
+<ul>
+  <li>所有 WA 按鈕（外傭 HK/ID/PH、僱主、跟進、WhatsApp 模組發送）一律 <code>openWATab({kind, code, phone, preset, kbLang})</code> → <code>window.open</code> 空白分頁 → <code>buildWATabDoc()</code> document.write 寫入<b>自含 HTML</b>（Tailwind CDN）：左邊 WhatsApp 範本列表（可揀用/新增/編輯/刪除，分頁內經 <code>KEYMAP</code> 讀取對應語言嘅 <code>wb_kb_templates_v1 / _en_v1 / _indo_v1 / _tag_v1</code>），右邊對話框（可改號碼、編輯訊息）。</li>
+  <li>分頁按「發送經 WhatsApp」→ <code>wa.me</code> 連結 → 發送紀錄寫 <code>wb_sendlog_pending_v1</code>。</li>
+  <li>主頁 init 同 window focus 時 <code>mergePendingSends()</code> 合併入 <code>DB.sendLog</code> 並更新僱主 <code>lastContact</code>。</li>
+  <li><b>原頁面完全唔會跳轉</b>（早前 switchMod('kb') 跳頁做法已廢除）。瀏覽器可能封鎖 pop-up，屬正常限制。</li>
+</ul>
+
+<h3 id="b9">B9. 修改守則（AI 必讀）</h3>
+<div class="box warn">
+<ol>
+  <li><b>只做漸進 Edit，禁止重寫整個檔案</b>。每次改動前先 Grep 確認現有實作，唔好靠記憶。</li>
+  <li><b>常數定義順序</b>：WCLASS/CONTRACTS 等必須喺引用之前（曾有 TDZ 事故）。所有枚舉放 Script 2/3 頂部常數區。</li>
+  <li><b>新增顯示文字 = 兩語同步</b>：zhHant / en 兩個字典都要加 key，否則切語言會出 key 名。<b>（第十輪曾加 Tagalog、第十一輪移除；第十二輪再移除 Indonesia —— 語言現時只有中文 + English，唔好加返第三種。）</b></li>
+  <li><b>新增資料欄位四步曲</b>：① UI 表單 ② i18n ③ CSV_FIELDS（如需匯入匯出）④ <b>migrateDB 補預設值</b>。缺 ④ 舊草稿會 render 出 undefined。</li>
+  <li><b>寫入動作前必 pushUndo()</b>，之後 markChange()（自動 saveDraft＋autoBackup）＋ re-render。</li>
+  <li><b>技能/需求 chip</b>：用純 div + onclick classList.toggle('on')，<b>唔好用 label 包 hidden checkbox</b>（會雙重觸發）。</li>
+  <li><b>事件綁定</b>：innerHTML 重寫後要重新綁；用 <code>el.querySelectorAll('[data-act]')</code> 模式，唔好用 inline onclick 帶複雜參數（引號轉義易錯）。</li>
+  <li><b>模板字串入面嘅屬性</b>：布林屬性寫 <code>${w?'disabled':''}</code>，唔好寫 <code>disabled="${w?...}"</code>（曾造成語法錯誤令整頁空白）。</li>
+  <li><b>★ 唔准直接呼叫 <code>lucide.createIcons()</code></b>：統一用 <code>refreshIcons()</code>。CDN 被擋／離線時前者會 throw，令 render 函式中斷 → 事件綁定漏做 → 用戶見到「按鈕冇反應」（第十一輪修嘅「入新資料閃退」根因）。同理 Tailwind config 要用 <code>typeof tailwind !== 'undefined'</code> 防護。</li>
+  <li><b>★ localStorage 一律用 <code>lsSet(key,val)</code></b>，唔好直接 <code>localStorage.setItem()</code>（配額爆時會 throw；<code>savePrefs()</code> 冇防護會令 <code>switchMod()</code> 中斷＝介面凍結）。</li>
+  <li><b>★ Undo 快照唔好存全份 DB</b>：用 <code>undoSnapshot()</code> 只存業務欄位，並保留 2MB 總量上限。存全份 → 716 筆時 20 步 ≈ 18MB → 爆配額。</li>
+  <li><b>★ 多個模組共用同一批 DOM id 時</b>，一定要用 <code>el.querySelector('#id')</code> 作用域限定，<b>唔可以用 <code>document.getElementById('#id')</code></b>（永遠攞到 DOM 順序較前嗰個模組）。中英文對答庫就係咁出事（英文版加唔到範本）。</li>
+  <li><b>測試流程（每次改動後必做）</b>：寫臨時 Node 測試（DOM stub：document/localStorage/sessionStorage/lucide/matchMedia/window.addEventListener/documentElement）→ 提取 &lt;script&gt; blocks（regex 要兼容 \r\n）→ vm.runInThisContext 載入 → 斷言 → 通過後刪除臨時檔。測試斷言失敗時先分辨係「真 bug」定「harness 限制」（stub querySelectorAll 回空陣列、innerHTML 唔會 parse HTML）。<br><b>另需 Chrome CDP 端到端驗證</b>（真實 DOM + localStorage + 真實 click 事件），並額外測：<b>CDN 被擋</b>（Network.setBlockedURLs）、<b>localStorage 配額爆</b>、<b>真實資料集</b>（用 <code>crm-backup-*.json</code> seed）。</li>
+  <li><b>WhatsApp 訊息範本按語言分庫</b>（中 / ENG / INDO / Tagalog），每個語言板塊各自維護：<b>中</b>純中文、<b>ENG/INDO/Tagalog</b> 界面用英文（INDO/Tagalog 內容留待填寫）。唔好將範本強行跨語言共用，亦唔好加返階段分類。</li>
+  <li><b>會員登入系統（crm-auth.js）</b>：角色只有 ADMIN / MEMBER；Member 唔可以見到會員管理編輯介面（只讀名單）；所有帳戶寫入都要 <code>isAdmin()</code> 保護；記錄經手權由 <code>canEditRecord()/canDeleteRecord()</code>（比對 <code>ownerEmail</code>）判斷。密碼明文<b>絕不</b>寫入 DB 或匯出 JSON —— 只存 <code>pwdHash</code>＋<code>pwdSalt</code>。</li>
+  <li><b>唔好刪除</b>：黑名單頁、每日跟進、備份模組、Undo —— 用戶明確要求過嘅功能。<br>
+  （<b>Job Order 已於 2026-10-25 按用戶要求移除</b>，唔好喺唔有用戶指示下加返。）</li>
+  <li><b>★ 智能配對引擎改動守則</b>：① 新增篩選條件＝喺 <code>MATCH_STATE</code> 加一個 key → 喺 <code>renderMatchEngine()</code> 加對應 control（記得 <code>bindSel / bindNum</code> 綁事件）→ 喺 <code>runMatching()</code> 加判斷。三步缺一不可。② <code>MATCH_CONDS</code> 係由 <code>SKILLS</code> 動態生成（<code>SK:</code> 前綴），唔好手寫死 16 個。③ 等級比較用 <code>EDU_RANK</code>（教育）同 <code>LANG_RANK</code>（語言），唔好用字串比較。④ 每個新 i18n 鍵<b>中英都要加</b>。⑤ 「有工做」規則用 <code>EXPIRING_DEFAULT_DAYS</code>（140）做預設值，門檻可由使用者改。</li>
+  <li><b>★ 刪除功能時要保留資料欄位</b>：移除 Job Order 時 <code>DB.matchings</code> 仍然保留喺 <code>emptyDB()</code>、<code>undoSnapshot()</code>、<code>autoBackup()</code>、<code>exportJSON()</code>，令現有 JSON 備份檔可以照常還原，唔會因改版而遺失用戶資料。</li>
+  <li><b>★ 第十四輪：問卷模組守則</b>：① 新增問卷題目要同時更新 <code>SURVEY_QUESTIONS</code>、<code>alias</code>（中英標籤）、<code>surveyHint()</code>（顯示提示）三處，否則解析唔到；② 解析出嚟嘅值<b>一律經檢核表</b>，唔好直接寫入資料庫；③ <code>normSkills()</code> 必須同時支援「自然語言關鍵字」同「CRM 技能碼本身」，否則 <code>代碼→文字→代碼</code> 來回會失真（已踩坑）。</li>
+  <li><b>★ 第十四輪：個人紀錄格式守則</b>：① 標題用 <code>PROF_T</code>／值用 <code>PROF_BI</code>，<b>固定中英</b>，唔受 <code>CUR_LANG</code> 影響（與網站一致）；② 網站「經驗」用 <code>PROF_EXP</code>、「工作意向」用 <code>PROF_PRIORITY_LABELS</code>，兩套措辭唔同，唔好溝埋；③ 新增欄位要同步 <code>migrateDB()</code>。</li>
+</ol>
+</div>
+
+<h3 id="b10">B10. 災難復原程序</h3>
+<h4>情境 1：HTML 檔案仲喺，但瀏覽器資料被清（localStorage 冇咗）</h4>
+<ol>
+  <li>開啟 HTML（會載入示範數據）→ 備份頁 → 「選擇 JSON 備份檔還原」→ 揀最近一次匯出嘅 <code>crm-backup-*.json</code>。完成。</li>
+  <li>冇 JSON 備份但有大約日期較近嘅 CSV → 分別匯入 FDH 同 EMP CSV（重複策略：skip）。注意 CSV 只有主資料，無 Job Order/帳戶密碼/範本修改。</li>
+</ol>
+<h4>情境 2：HTML 檔案本身丟失</h4>
+<ol>
+  <li>檢查 Windows 資源回收筒 / 備份硬碟 / <code>.workbuddy/memory/</code> 工作日誌。</li>
+  <li>如果完全冇副本：開一個新 AI 對話，<b>貼上本手冊全文（尤其 B1–B9）</b>，指示 AI 按 B3 Schema + B5 區塊地圖重建 <code>ddhc salespro crm v2.5.html</code>（＋同資料夾 <code>crm-data.js</code> / <code>crm-auth.js</code>），再用 CSV 匯入檔（<code>indo-helper-import.csv</code>、<code>new-salary-employers-import.csv</code>）同任何 JSON 備份還原資料。</li>
+  <li>重建後第一件事：匯入資料 → 驗證 48 項測試行為（見 B11）→ 匯出 JSON 備份。</li>
+</ol>
+<h4>預防措施（用戶責任）</h4>
+<ul>
+  <li>每星期匯出 JSON 存去公司 OneDrive/USB。</li>
+  <li>將 <code>ddhc salespro crm v2.5.html</code> ＋ <code>crm-data.js</code> ＋ <code>crm-auth.js</code> 同本手冊放同一資料夾，一齊備份。</li>
+  <li>唔好撳「清除瀏覽器資料」時選埋「網站資料」。</li>
+</ul>
+
+<h3 id="b11">B11. 修訂歷史（十四輪，詳細日誌喺 .workbuddy/memory/）</h3>
+<table>
+<tr><th>輪</th><th>內容摘要</th></tr>
+<tr><td>1</td><td>初版：六大模組（數據表/配對/跟進/大量WhatsApp/履歷/備份）、多語、2027 假日、示範數據、Undo 20 步</td></tr>
+<tr><td>2</td><td>菲/印傭庫、僱主庫、配對紀錄拆獨立左欄頁</td></tr>
+<tr><td>3</td><td>登入系統、工人類別（GOOD/BEST/NO_GOOD/BLACKLIST）、50 條多語 KB、ST1–ST20 階段、Sales 分工</td></tr>
+<tr><td>4</td><td>匯入 INDO HELPER 164 筆（同名同電話去重→158）＋ new salary 1,147 筆僱主</td></tr>
+<tr><td>5</td><td>印傭頁 9+2 修訂：刪當地姓名/前僱主地區、5 個經驗年數、3 個日期、4 個狀態、星座生肖、雙號碼 WA、列表欄位重排</td></tr>
+<tr><td>6</td><td>黑名單獨立頁＋自動隱藏、狀態/類別/技能三篩選器、菲律賓號碼、配對紀錄改名 Job Order、僱主庫刪財務欄/紅色警告、編號可編輯、修正客戶等級欄位錯位 bug</td></tr>
+<tr><td>7</td><td>僱主 5 階段多語（搵工人中/處理中/聘請中/已終止/需跟進）、隱藏電話、跟進事項欄、爭緊錢等級、跟進日期、僱主 WA 新邏輯、Job Order Finding Helper 面板</td></tr>
+<tr><td>8</td><td>全部 WA 按鈕改開新分頁（對話框＋知識庫）、每日跟進重做（生日不逾期前 3 天、檔案/WA 按鈕）、知識庫純中文＋6 大分類＋範本增刪改</td></tr>
+<tr><td>9</td><td>刪品牌副標題、CSV 匯出、刪大量訊息模組、Admin/普通雙軌登入（逐帳戶密碼、員工管理 Admin 限定）</td></tr>
+<tr><td><b>10</b></td><td><b>第十輪（2026-10-24）：</b>① 加入 <b>Tagalog 第四語言</b>（<b>已於第十一輪移除</b>）；② 客服知識庫改名「<b>WA 客人標準對答</b>」，另加獨立英文版模組「WA 標準對答 (EN)」（空白起步、可自由編輯、獨立 localStorage key）；③ <b>修正知識庫只載入 29／50 條</b> bug（FAQ／法例條目因無對應階段而丟失 → 新增「公司・法例」分類）；④ 備份模組新增<b>自動同步資料夾</b>（File System Access API：開機自動讀入最新備份＋改動後自動寫出，只清理自己寫的檔）；⑤ 匯入引擎支援<b>多工作表 Excel 選擇器</b>；⑥ 新增 import profiles <code>indohelper</code> / <code>newsalary</code>（對應現時實際檔案 <code>INDO HELPER.xlsx</code> / <code>new salary 2027.xlsx</code>）；⑦ <code>normalizeDate()</code> 支援 MM/DD/YYYY、DD/MM/YYYY、只有年、Excel 序號、NA/NIL；⑧ 工人識別鍵改為<b>分層</b>（編號 → 姓名+生日+電話 → 姓名+電話 → 姓名+生日），重複匯入唔再產生重複資料；⑨ 修正 <code>normalizeFdh()</code> skills 陣列 bug、<code>genEmpCode()</code> 逾 999 筆編號碰撞 bug。</td></tr>
+<tr><td><b>11</b></td><td><b>第十一輪（2026-10-24）：</b>用戶 3 項需求全數完成。<br>① <b>修「菲傭／印傭／僱主 入新資料閃退」</b> —— 根因係 <code>lucide.createIcons()</code> 直接呼叫（CDN 被擋／離線時 <code>ReferenceError: lucide is not defined</code>），令 render 函式喺綁事件之前中斷 → 新增按鈕「冇反應」＝用戶見到嘅閃退。改為全部經 <code>refreshIcons()</code>（try/catch + 文字 fallback），Tailwind config 亦加 <code>typeof</code> 防護。另加 <b>localStorage 配額管理</b>（<code>lsSet/lsMakeRoom</code>、Undo 快照只存業務欄位且封頂 2MB、自動備份封頂 1.5MB、<code>savePrefs/saveDraft/kbTplSave</code> 全改安全寫入）→ 根治「資料靜默遺失」＋「介面凍結」＋「Undo 快照過期反而遺失資料」。<br>② <b>移除全部 Tagalog 翻譯</b>（<code>I18N.tl</code>、<code>I18N_EXTRA.tl</code>×2、<code>LANG_NAMES.tl</code>、語言鈕、merge 清單），語言由四語改三語（中文／English／Indonesia），鈕位改 1×3 網格，<code>applyLang()</code> 加舊值 <code>'tl'</code> 自動回退中文嘅遷移。<br>③ <b>修「WA English 無法新增範本」</b> —— 根因係中英文兩個模組用<b>同一批 DOM id</b>，<code>document.getElementById()</code> 永遠攞到中文版元素 → 英文版按鈕無 handler、範本寫錯容器。全部改用 <code>el.querySelector()</code> 作用域限定。</td></tr>
+<tr><td><b>12</b></td><td><b>第十二輪（2026-10-25）：</b>用戶 3 項需求全數完成。<br>① <b>刪除內建示範數據</b>（省 token / 檔案體積）：移除整個 <code>demoData()</code> 函式（2 名外傭 + 2 名僱主 + 1 筆 Job Order + 4 張便利貼），<code>seedIfEmpty()</code> 改為 <code>emptyDB()</code> 空白起步；刪走已無用嘅 <code>btn.clearSample</code> 翻譯。<b>新裝用戶開啟即空白系統</b>，實際資料靠匯入或自行輸入。<br>② <b>完全移除 Indonesia 語言</b>：刪 <code>I18N.id</code>（8.7KB）、<code>I18N_EXTRA.id</code>、<code>LANG_NAMES.id</code>、<code>data-lang="id"</code> 語言鈕（3→2，網格改 1×2）、merge 清單；刪 <code>STAGES</code> 70 個 + <code>KB</code> 50 條嘅 <code>idn</code> 欄位；<code>stageLabel()</code>／<code>renderHolidayBanner()</code>／<code>drawResume()</code> 移除 id 分支；CSV 欄名別名 <code>names.id</code> 56 個全刪。合共<b>省約 30KB</b>。<b>語言現時只有中文 + English</b>；<code>applyLang()</code> 已自動把舊用戶 <code>PREFS.lang='id'</code> 回退中文。<b>⚠ 註</b>：「印傭／印尼傭」係<b>工人國籍</b>（<code>nationality:'ID'</code>）同介面語言無關，<code>dic.ID</code>／<code>tab.id</code> 等翻譯<b>必須保留</b>。<br>③ <b>菲傭／印傭頁改動</b>：<b>a)</b> 刪走工人類別（shield-alert）圖示按鈕 —— 只刪菲傭／印傭<b>列表</b>，<b>黑名單頁保留</b>（改類別要用）；<b>b)</b> 新增<b>西方星座</b>（12）＋<b>中國生肖</b>（12）兩個下拉篩選器（<code>LIST_STATE.ph/id.fZodiac/fCzodiac</code> ＋ <code>filterHelpers()</code> ＋ <code>getZodiac()/getChineseZodiac()</code>）；<b>c)</b> 技能標籤換成用戶指定嘅 <b>16 個新標籤</b>（No Holiday／New Born 湊BB／Toddler 湊小朋友／Elderly／Serious Illness／Special Child／Dog Care／Cat Care／Wash Car／Driving／Male Helper／Male Employer 男僱主／No Room 可同房／Own Room／Share Job／Good Cook 煮餸好），中英譯文同步更新，<code>indohelper</code> 匯入 profile 嘅 <code>skillMap</code> 重新對應。<b>舊碼遷移</b>：<code>SKILL_MIGRATE</code>（S_PET→S_DOG+S_CAT、S_HOUSEWORK→S_GOODCOOK+S_WASHCAR）由 <code>migrateDB()</code> 自動處理，實測 716 筆外傭＋317 筆僱主遷移後<b>零未知碼、零重複碼、可重複執行</b>。</td></tr>
+<tr><td><b>13</b></td><td><b>第十三轮（2026-10-25）：</b>用戶 2 項需求全數完成。<br>
+① <b>刪除 Job Order（職位訂單）模組</b>：左側選單移除「Job Order」項；刪走 <code>renderMatchingTable / filterMatchings / resultBadge / openMtForm / applyHireChain / currentFdhOf</code>、<code>RESULTS</code> 常數、<code>LIST_STATE.mt</code>、<code>mt.* / chain.* / tab.mt / st.mt</code> i18n 群組、<code>dic.HIRED/PENDING/REJECTED/VOID</code>；狀態列移除 Job Order 筆數。<b>Job Order 嘅「搵工人中僱主」面板功能已遷移</b>到智能配對引擎嘅僱主下拉（分「搵工人中／其他僱主」兩組）。<b>⚠ <code>DB.matchings</code> 欄位刻意保留</b>（emptyDB / undoSnapshot / autoBackup / exportJSON 全部照舊），令現有 JSON 備份檔可以照常還原，唔會因改版而遺失用戶資料。舊用戶 <code>PREFS.mod='data-mt'</code> 由 <code>switchMod()</code> + <code>migrateDB()</code> 雙重自動跳去僱主庫。<br>
+② <b>智能配對引擎大幅擴充</b>：<b>a)</b> 加權評分條件由 5 個技能擴充為<b>全部 16 個技能標籤</b>（由 <code>SKILLS</code> 動態生成）＋ 3 種語言（改用 <code>LANG_RANK</code> 等級比較）；<b>b)</b> 新增<b>硬性篩選</b>：國籍（加「其他」）、<b>教育程度（最低）</b>（<code>EDU_RANK</code>）、<b>Visa 最少剩餘日數</b>、<b>西方星座</b>、<b>中國生肖</b>、<b>婚姻狀況</b>、<b>有子女／無子女</b>、英文／廣東話／普通話最低等級、<b>完成合約次數（最少）</b>、<b>各地經驗最少年數</b>（星馬／台灣中國／中東／香港／其他國家）；<b>c)</b> 新增<b>僱主選擇器</b>（分「搵工人中／其他僱主」兩組）＋「套用僱主條件」一鍵把需求標籤變評分條件；<b>d)</b> <b>★「有工做」＋Visa 140 日規則</b>：<code>EXPIRING_DEFAULT_DAYS=140</code>，預設開啟 —— 狀態「有工做」而 Visa 到期距今 140 日內（或已過期 140 日內）嘅工人會出現喺配對結果，方便提早跟進續約／轉工；天數可改、可關；<b>e)</b> 結果卡新增教育／婚姻／子女／語言／各地經驗／完成合約次數／星座生肖／Visa 剩餘日數；<b>f)</b> <b>候選名單升級</b>（取代原本通往 Job Order 嘅工作流）：每個候選有 WA HK／WA PH・ID 按鈕、查看履歷、移除，另加「複製名單」（含電話）與<b>持久化</b>（<code>wb_crm_cands</code>，重新開檔唔會唔見）。</td></tr>
+<tr><td><b>14</b></td><td><b>第十四輪（2026-10-26）：</b>用戶 3 項需求全數完成。<br>
+① <b>新增「智能問卷・資料轉換」模組</b>（左欄新項目）：<b>①</b> 揀工人／手動輸入姓名＋電話 → <b>②</b> 產生<b>固定格式 41 題問卷</b>（已知資料自動帶入）→ 經 WhatsApp 新分頁發送（沿用 <code>openWATab</code>）／複製問卷文字 → <b>③</b> 貼上工人回覆 → <b>智能解析</b> → <b>④</b> 檢核表逐格可改 → 寫入資料庫（新增 or 更新既有工人）。解析支援<b>編號式／標籤式／題目全文式</b>三種寫法，正規化 Y/N、日期（中英多格式）、枚舉碼、技能關鍵字、子女明細（人數 vs 年齡自動區分），每欄標示<b>來源行號</b>，解析唔到嘅行會列出但唔影響其他欄位。問卷發送紀錄存 <code>DB.surveys</code>（上限 30）。<br>
+② <b>「生成履歷」重寫為「個人紀錄 Personal Information」</b>：輸出格式完全對齊嘉勝網站 <code>kashingagency.agentpro.com.hk/profile/{id}</code> —— <b>Personal Information 個人紀錄</b>（13 欄）→ <b>Family Background 家庭背景</b>（4 欄）→ <b>Working Experience 工作經驗</b>（相片位、沒有/有經驗、7 個經驗勾選框、語文能力 4 級標記）→ <b>Domestic Helper Employment Record 工作記錄</b>（8 個地區經驗年數、6 個工作意向、Last + 2 段 Previous Employer、每段 14 個工作內容勾選框）→ <b>General Information 一般諮詢</b>（8 條 Y/N）＋免責聲明。標題固定中英；新增<b>「編輯工作記錄」</b>彈窗編輯器。<br>
+③ <b>Schema 擴充</b>：外傭新增 <code>maidType / religion / height / weight / spouseName / siblingCount / spouseOccupation / childrenDetail / workHistory / generalQA / profileExp / dutiesPriority / expID / expMY</code> 14 個欄位，<code>migrateDB()</code> 自動為舊草稿補值（字串子女明細自動轉陣列）；菲/印傭編輯頁新增「個人紀錄」分區（可直接改上述欄位＋8 條一般諮詢）。<b>原有欄位一律保留</b>，現有 JSON 備份檔可照常還原。</td></tr>
+  <tr><td><b>15</b></td><td><b>第十五輪（2026-10-30 · v2.5）：</b>用戶 2 項需求全數完成。<br>
+① <b>版本整理與獨立資料夾</b>：由 v2.4 升級為 <b>v2.5</b>，主程式 <code>ddhc salespro crm v2.5.html</code> ＋ companion <code>crm-data.js</code> / <code>crm-auth.js</code> ＋ 兩份問卷（<code>candidate_question.html</code> 8 步含相片、<code>employer question .html</code>）＋ <code>index.html</code> 總覽，全部搬到獨立 <code>v2.5/</code> 資料夾；所有內部 v2.4 參照已改指向 v2.5。<br>
+② <b>會員系統正式取代「員工管理」</b>（實作於 v2.4，本輪補齊手冊）：帳戶以<b>電郵</b>做唯一識別，角色只有 <b>Admin / Member</b>；密碼經 <b>SHA-256 ＋ per-member salt ＋ 800 輪</b>雜湊（明文絕不儲存）；Admin 開戶、Member 可用電郵自行註冊；<b>擁有權模型</b>（<code>ownerEmail</code>）令 Member 只可新增／修改自己經手嘅記錄。另含：問卷相片上傳（330×440 JPEG 自動壓縮）、候選／僱主問卷 <b>50% 完整度門檻</b>、僱主問卷回傳 CRM（<code>#emp=</code> 匯入碼）、WhatsApp 一鍵帶人＋推薦歷史與防重複（<code>DB.recommendations</code>）。<br>③ <b>WhatsApp 模組重構</b>：合併舊「WA 客人標準對答（中文）」＋「WA 標準對答 (EN)」為單一 <b>WhatsApp</b> 模組，內嵌 <b>中 / ENG / INDO / Tagalog</b> 四語言按鈕；徹底移除 6 個階段分類按鈕與「揀僱主自動跳分類」邏輯，範本改以語言分庫（四個獨立 localStorage key）；<b>修復搜尋框無反應</b>（搜尋只重繪清單、不失焦）；發送對象按語言區分（中/ENG 選僱主、INDO/Tagalog 選 Helper）。<br>
+<b>已知缺口</b>：PRD「流程 2」（配對結果自動推播／批量 WA 群發等）當時未提供，保留待補。</td></tr>
+</table>
+<div class="box info"><b>最新測試基準：</b>第十四轮後 —— <b>158 項</b>新功能回歸（<code>test_round13.js</code>：Job Order 移除 20 項 ＋ 新篩選 33 項 ＋ 配對行為 32 項 ＋ 候選名單 6 項 ＋ 模組渲染 13 項 ＋ i18n 51 項 ＋ 配額安全 4 項）＋ <b>50 項</b>真實資料集 &amp; CDN 全擋最惡劣情境（<code>test_round13_real.js</code>：716 外傭 + 317 僱主、10 個模組渲染零錯誤、140 日規則開關真實資料驗證、Job Order 零殘留掃描），<b>合共 208 項全過</b>；第十四輪另加 <b>221 項</b>（<code>test_round14.js</code>：模組接線、i18n 兩語對齊、常數完整性、解析器 6 組情境、問卷生成、<b>個人紀錄輸出 40+ 項欄位斷言</b>、寫入資料庫、migrateDB、既有模組零回歸、配額安全）＋ <b>72 項</b>真實 Chrome 端到端（<code>test_round14_e2e.js</code>：真實 DOM＋點擊＋localStorage＋截圖，零 console error／零 page error）。<b>目前合共 501 項全過</b>。任何修改後應重跑同等測試。 v2.5 另設測試套件：<code>crm-regress-test.js</code> / <code>crm-completeness-test.js</code> / <code>crm-employer-e2e-test.js</code> / <code>crm-photo-e2e-test.js</code> / <code>crm-recommend-e2e-test.js</code> / <code>crm-member-e2e-test.js</code>（均需 Chrome CDP 端到端驗證，開 headless Chrome 真實 click）。<h3 id="b12">B12. ★ 第十四輪新增模組架構（智能問卷・個人紀錄）</h3>
+<h4>B12.1 數據流</h4>
+<pre><code>【問卷流程】
+工人／經理
+   │  ① 揀工人 or 手動輸入姓名+電話
+   ▼
+buildSurveyText(helper)  ──►  41 題固定格式文字（已知值已帶入）
+   │
+   ├─► openWATab({kind:'fdh', preset:問卷文字})  ──► 新分頁 → wa.me 發送
+   ├─► 複製問卷文字（clipboard）
+   │
+   ▼ 工人 WhatsApp 回覆
+[貼上回覆文字]
+   │  parseSurveyReply(text)
+   │    ① 編號式  1. ANNA
+   │    ② 標籤式  Name: ANNA
+   │    ③ 題目式  Do you eat pork?: No
+   │    → 正規化：normSurveyDate / normYesNo / normTxt+枚舉 / normSkills / parseChildrenDetail
+   ▼
+檢核表（欄位｜值｜已填/未填｜來源行號）──► 使用者可逐格修改
+   │  saveSurveyToDB()
+   │    pushUndo() → 合併到 DB.helpers → markChange()
+   ▼
+DB.helpers（多 14 個「個人紀錄」欄位）
+
+【個人紀錄輸出】
+DB.helpers[h]  ──►  drawResume(h)  ──►  #resumeView（A4・可列印 / PDF）
+   ① Personal Information 個人紀錄（13 欄）
+   ② Family Background 家庭背景（4 欄）
+   ③ Working Experience 工作經驗（相片位・有/無經驗・7 勾選框・語文 4 級）
+   ④ Domestic Helper Employment Record 工作記錄（8 地區・6 意向・3 段僱主・14 工作項）
+   ⑤ General Information 一般諮詢（8 條 Y/N）
+   → 「編輯工作記錄」按鈕 → openWorkHistoryEditor(h)</code></pre>
+<h4>B12.2 解析器三層比對（parseSurveyReply）</h4>
+<table>
+<tr><th>層</th><th>規則</th><th>範例</th></tr>
+<tr><td>① 題號</td><td><code>^(\d{1,2})\s*[.、．。\)\)：:－\-–—]\s*(.*)$</code> → 查 <code>SURVEY_QUESTIONS</code> 嘅 n</td><td><code>12. 1990-03-20</code></td></tr>
+<tr><td>② 行首標籤</td><td>取第一個 <code>:</code>／<code>：</code> 前嘅文字，查 <code>SURVEY_ALIAS</code>（中英 alias 索引 + 一般諮詢 8 條全文）</td><td><code>Height: 160cm</code></td></tr>
+<tr><td>③ 行內搜尋</td><td>逐條 alias 用 regex 搜 <code>別名\s*[?？]?\s*[:：]\s*(.+)$</code></td><td><code>I am 151 cm tall. Height: 151</code></td></tr>
+</table>
+<div class="box warn">⚠ <b>已知取捨</b>：日期「<code>03/04/1990</code>」類 Day/Month 歧義一律當 <b>日/月/年</b>（香港習慣），如工人用美式 Month/Day 會解析錯日期 → <b>檢核表必須人手核對</b>；技能關鍵字係包含比對，<code>cook</code> 會命中 <code>cooking</code>，但 <code>I don't cook</code> 亦會命中（人手核對可修正）。</div>
+<h4>B12.3 個人紀錄欄位 → DB 對應</h4>
+<table>
+<tr><th>網站欄位</th><th>DB 欄位</th><th>缺值時顯示</th></tr>
+<tr><td>Maid number 傭工編號 / Type of maid 傭工類型</td><td>code / maidType</td><td>code 必有；maidType 為空時按國籍（PH/ID）自動補 OVERSEAS</td></tr>
+<tr><td>Name 傭工姓名 / Finish contract date 完約日期</td><td>engName / contractExpiry</td><td>—</td></tr>
+<tr><td>Nationality 國籍 / Education 教育程度</td><td>nationality / education</td><td>—</td></tr>
+<tr><td>Date of Birth 出生日期</td><td>birth → <code>YYYY-MM-DD / 生肖 / 星座</code></td><td>—</td></tr>
+<tr><td>Religion 宗教 / Age 年齡 / Weight 體重 / Marital Status 婚姻狀況 / Height 高度</td><td>religion / calcAge(birth) / weight / marital / height</td><td>—</td></tr>
+<tr><td>Spouse's Name 配偶 / Sibling 兄弟姐妹數目 / Occupation 配偶職業</td><td>spouseName / siblingCount / spouseOccupation</td><td>—</td></tr>
+<tr><td>Age of children 子女年齡</td><td>childrenDetail[] → <code>兒子Son ( 2 ), Age ( 4, 9 歲 )</code></td><td>—</td></tr>
+<tr><td>Experience 經驗（7 勾選框）</td><td>profileExp（無則由 skills 推導）</td><td>全部 ☐</td></tr>
+<tr><td>Language Ability 語文能力</td><td>langCt / langEn / langPtn（● = 現時等級）</td><td>三級 ○○○</td></tr>
+<tr><td>Country Experience 地區工作經驗</td><td>expHK/expME/expSGMY/expTWPRC/expID/expMY/expOther</td><td>年份留空</td></tr>
+<tr><td>Duties Priority 工作意向（6 勾選框）</td><td>dutiesPriority（無則由 profileExp 推導）</td><td>全部 ☐</td></tr>
+<tr><td>Last / Previous Employer ×2</td><td>workHistory[0..2]</td><td>每段顯示「—」</td></tr>
+<tr><td>General Information 一般諮詢（8 條）</td><td>generalQA（8 個 Y/N）</td><td>☐ Yes 是 ☐ No 否</td></tr>
+</table>
+<div class="box info">📌 <b>星座／生肖</b>：CRM 用 <code>getZodiac()</code>／<code>getChineseZodiac()</code> 自行計算（<code>ZOD_CUT</code> 邊界法），<b>唔會</b>抄網站入面可能已過時嘅值。例：1989-03-15 → 蛇 / 雙魚座。</div>
+</div>
+
+<footer>DDHC SLESpro agency · CRM 系統手冊 v2.5 · 2026-10-30 更新（第十五輪：會員系統 ＋ 問卷相片 ＋ 50% 門檻 ＋ 推薦追蹤）· 本檔案可列印或交 AI 閱讀；更新架構後請同步更新 B3/B5/B11/B12。</footer>
+</div>
+</body>
+</html>

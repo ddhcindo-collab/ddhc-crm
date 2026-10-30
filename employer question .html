@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDHC - Employer Requirements Questionnaire / 僱主聘請需求問卷</title>
+    <style>
+        :root {
+            --primary-color: #0284c7;
+            --primary-hover: #0369a1;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #334155;
+            --border-color: #cbd5e1;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 850px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin: 20px;
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        .header {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #0f172a;
+        }
+
+        .header p {
+            margin: 4px 0 0;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .lang-switch-btn {
+            background-color: #f1f5f9;
+            color: var(--primary-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .lang-switch-btn:hover {
+            background-color: #e2e8f0;
+        }
+
+        /* Step Indicators & Progress Bar */
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .step-badge {
+            flex: 1;
+            text-align: center;
+            padding: 8px 0;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            background: #e2e8f0;
+            color: #475569;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .step-badge.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            background-color: #e2e8f0;
+            height: 6px;
+            border-radius: 3px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 12.5%;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+        .fill-pct { font-size: 12px; color: #64748b; margin: -16px 0 18px; text-align: right; }
+        .fill-pct.ok { color: #16a34a; }
+        .fill-pct.warn { color: #d97706; }
+
+        /* Sections */
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 18px;
+            border-left: 4px solid var(--primary-color);
+            padding-left: 10px;
+        }
+
+        .section-desc {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 15px;
+        }
+
+        /* Form elements */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        }
+
+        /* Inline Radio / Checkbox Pill Groups */
+        .pill-group, .checkbox-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+        }
+
+        .pill-label, .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+            background: #f1f5f9;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+        }
+
+        .pill-label:hover, .checkbox-item:hover {
+            background: #e2e8f0;
+        }
+
+        .pill-label input, .checkbox-item input {
+            accent-color: var(--primary-color);
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Sub-table / Detail rows for members */
+        .member-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .member-table td {
+            padding: 8px 6px;
+            vertical-align: middle;
+        }
+
+        .member-table td:first-child {
+            width: 110px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Buttons */
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 20px;
+            gap: 12px;
+        }
+
+        button.nav-btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-next, .btn-submit {
+            background-color: var(--primary-color);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-next:hover, .btn-submit:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-prev {
+            background-color: #dfe4ea;
+            color: #2f3640;
+        }
+
+        .btn-prev:hover {
+            background-color: #ced6e0;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-box {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .modal-box h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        .modal-box p {
+            color: #64748b;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .modal-box button {
+            margin-top: 20px;
+            padding: 10px 24px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div>
+            <h1 id="lblTitle">DDHC 僱主招聘需求問卷</h1>
+            <p id="lblSubtitle">專業家傭配對及招聘服務</p>
+        </div>
+        <button type="button" class="lang-switch-btn" id="langSwitchBtn" onclick="toggleLanguage()">🇬🇧 English</button>
+    </div>
+
+    <!-- Step Indicators (Numbered 1-8) -->
+    <div class="step-indicator" id="stepIndicator">
+        <span class="step-badge active">1</span>
+        <span class="step-badge">2</span>
+        <span class="step-badge">3</span>
+        <span class="step-badge">4</span>
+        <span class="step-badge">5</span>
+        <span class="step-badge">6</span>
+        <span class="step-badge">7</span>
+        <span class="step-badge">8</span>
+    </div>
+
+    <div class="progress-bar-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="fill-pct" id="fillPercentage">已填：0%</div>
+
+    <form id="employerForm" novalidate>
+        <!-- STEP 1: Welcome & Salutation -->
+        <div class="form-section active" id="section0">
+            <div class="section-title" id="sec1Title">1. 僱主基本資料與稱呼</div>
+            <p class="section-desc" id="sec1Desc">歡迎填寫問卷！請先提供您的基本稱呼與姓名，以便我們為您跟進。</p>
+            
+            <div class="form-group">
+                <label id="lblSalutation">稱呼 *</label>
+                <div class="pill-group">
+                    <label class="pill-label"><input type="radio" name="salutation" value="Mr" checked> <span id="optMr">先生 (Mr.)</span></label>
+                    <label class="pill-label"><input type="radio" name="salutation" value="Ms"> <span id="optMs">小姐 (Ms.)</span></label>
+                    <label class="pill-label"><input type="radio" name="salutation" value="Mrs"> <span id="optMrs">太太 (Mrs.)</span></label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label id="lblName">姓名 *</label>
+                <input type="text" id="employerName" name="employerName" placeholder="請輸入姓名 (例如：KOBE / 陳大文)" required>
+            </div>
+
+            <div class="form-group">
+                <label id="lblNickname">暱稱 / 常用稱呼</label>
+                <input type="text" id="nickname" name="nickname" placeholder="請輸入暱稱 (選填)">
+            </div>
+
+            <div class="btn-container">
+                <button type="button" class="nav-btn btn-prev" style="visibility: hidden;">Back</button>
+                <button type="button" class="nav-btn btn-next" id="btnNext1" onclick="nextSection(1)">下一頁</button>
+            </div>
+        </div>
+
+        <!-- STEP 2: Contact Details -->
+        <div class="form-section" id="section1">
+            <div class="section-title" id="sec2Title">2. 聯絡方式</div>
+            <p class="section-desc" id="sec2Desc">請至少提供一種聯絡方式 (電話 / WhatsApp / Email / 通訊 App)：</p>
+
+            <div class="form-group">
+                <label id="lblArea">居住地區</label>
+                <div class="pill-group">
+                    <label class="pill-label"><input type="radio" name="area" value="HK" checked> <span id="optHK">香港</span></label>
+                    <label class="pill-label"><input type="radio" name="area" value="KLN"> <span id="optKLN">九龍</span></label>
+                    <label class="pill-label"><input type="radio" name="area" value="NT"> <span id="optNT">新界</span></label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label id="lblPhone">聯絡電話</label>
+                <input type="text" id="phone" name="phone" placeholder="例如：9123 4567">
+            </div>
+
+            <div class="form-group">
+                <label id="lblWhatsapp">WhatsApp 號碼</label>
+                <input type="text" id="whatsapp" name="whatsapp" placeholder="例如：+852 9123 4567">
+            </div>
+
+            <div class="form-group">
+                <label id="lblEmail">電郵地址 (Email)</label>
+                <input type="text" id="email" name="email" placeholder="name@example.com">
+            </div>
+
+            <div class="form-group">
+                <label id="lblPreferredApp">常用通訊 Apps</label>
+                <div class="pill-group">
+                    <label class="pill-label"><input type="checkbox" name="preferredApp" value="WhatsApp" checked> WhatsApp</label>
+                    <label class="pill-label"><input type="checkbox" name="preferredApp" value="WeChat"> WeChat</label>
+                    <label class="pill-label"><input type="checkbox" name="preferredApp" value="Line"> Line</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label id="lblSource">認識本公司途徑</label>
+                <select id="source" name="source">
+                    <option value="Friend Referral" id="optSrc1">朋友介紹</option>
+                    <option value="Walk-in" id="optSrc2">門市 Walk-in</option>
+                    <option value="Facebook / Social Media" id="optSrc3">Facebook / 社交媒體</option>
+                    <option value="Website / Search Engine" id="optSrc4">網站搜尋</option>
+                    <option value="Existing Client" id="optSrc5">舊客戶</option>
+                </select>
+            </div>
+
+            <div class="btn-container">
+                <button type="button" class="nav-btn btn-prev" id="btnBack2" onclick="nextSection(0)">上一頁</button>
+                <button type="button" class="nav-btn btn-next" id="btnNext2" onclick="nextSection(2)">下一頁</button>
+            </div>
+        </div>
+
+        <!-- STEP 3: Service Members & Family Background -->
+        <div class="form-section" id="section2">
+            <div class="section-title" id="sec3Title">3. 家庭背景與服務人數</div>
+            
+            <div class="form-group">
+                <label id="lblStartDate">預計到職日期</label>
+                <input type="date" id="startDate" name="startDate">
+            </div>
+
+            <div class="form-group">
+                <label id="lblServiceMembers">家庭服務人數細節</label>
+                <table class="member-table">
+                    <tr>
+                        <td id="tdAdult">成人：</td>
+                        <td><input type="number" id="cntAdult" min="0" placeholder="0" style="width: 80px;"> 人</td>
+                        <td><input type="text" id="descAdult" placeholder="備註 (如：夫婦 1 對)"></td>
+                    </tr>
+                    <tr>
+                        <td id="tdInfant">初生嬰兒：</td>
+                        <td><input type="number" id="cntInfant" min="0" placeholder="0" style="width: 80px;"> 人</td>
+                        <td><input type="text" id="descInfant" placeholder="年齡 / 預產期"></td>
+                    </tr>
+                    <tr>
+                        <td id="tdChildren">小童：</td>
+                        <td><input type="number" id="cntChildren" min="0" placeholder="0" style="width: 80px;"> 人</td>
+                        <td><input type="text" id="descChildren" placeholder="年齡 (例如：3歲及6歲)"></td>
+                    </tr>
+                    <tr>
+                        <td id="tdElderly">長者：</td>
+                        <td><input type="number" id="cntElderly" min="0" placeholder="0" style="width: 80px;"> 人</td>
+                        <td><input type="text" id="descElderly" placeholder="年齡與健康狀況"></td>
+                    </tr>
+                    <tr>
+                        <td id="tdDisabled">傷殘/需照顧：</td>
+                        <td><input type="number" id="cntDisabled" min="0" placeholder="0" style="width: 80px;"> 人</td>
+                        <td><input type="text" id="descDisabled" placeholder="具體狀況"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="btn-container">
+                <button type="button" class="nav-btn btn-prev" id="btnBack3" onclick="nextSection(1)">上一頁</button>
+                <button type="button" class="nav-btn btn-next" id="btnNext3" onclick="nextSection(3)">下一頁</button>
+            </div>
+        </div>
+
+        <!-- STEP 4: Living Environment -->
+        <div class="form-section" id="section3">
+            <div class="section-title" id="sec4Title">4. 居住環境</div>
+
+            <div class="form-group">
+                <label id="lblFlatSize">居住面積 (平方呎)</label>
+                <input type="number" id="flatSize" name="flatSize" placeholder="例如：600">
+            </div>
+
+            <div class="form-group">
+                <label id="lblBedrooms">睡房數目</label>
+                <input type="number" id="bedrooms" name="bedrooms" placeholder="例如：3">
+            </div>
+
+            <div class="form-group">
+                <label id="lblMaidRoom">工人房安排</label>
+                <div class="pill-group" style="flex-direction: column;">
+                    <label class="pill-label"><input type="radio" name="maidRoom" value="Own Room" checked> <span id="optRoom1">獨立工人房 (Flat / House)</span></label>
+                    <label class="pill-label"><input type="radio" name="maidRoom" value="Share Child Room"> <span id="optRoom2">無獨立房，與小孩同住</span></label>
+                    <label class="pill-label"><input type="radio" name="maidRoom" value="Separate Space"> <span id="optRoom3">無獨立房，設有分隔開的地方</span></label>
+                    <label class="pill-label"><input type="radio" name="maidRoom" value="Other"> <span id="optRoom4">其他安排</span></label>
+                </div>
+            </div>
+
+            <div class="btn-container">
+                <button type="button" class="nav-btn btn-prev" id="btnBack4" onclick="nextSection(2)">上一頁</button>
+                <button type="button" class="nav-btn btn-next" id="btnNext4" onclick="nextSection(4)">下一頁</button>
+            </div>
+        </div>
+
+        <!-- STEP 5: Job Duties & Benefits -->
+        <div class="form-section" id="section4">
+            <div class="section-title" id="sec5Title">5. 主要工作與休息日安排</div>
+
+            <div class="form-group">
+                <label id="lblOffDay">每週休息日</label>
+                <div class="pill-group">
+                    <label class="pill-label"><input type="radio" name="offDay" value="Sunday" checked> <span id="optSun">星期日休息</span></label>
+                    <label class="pill-label"><input type="radio" name="offDay" value="Saturday"> <span id="optSat">星期六休息</span></label>
+                    <label class="pill-label"><input type="radio" name="offDay" value="Weekday"> <span id="optWkday">平日休息</span></label>
+                    <label class="pill-label"><input type="radio" name="offDay" value="Other"> <span id="optOffOther">其他</span></label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label id="lblHomeMembers">留在家中人員</label>
+                <div class="pill-group">
+                    <label class="pill-label"><input type="checkbox" name="homeMembers" value="Female Employer"> <span id="lblFemaleEmp">女僱主</span></label>
+                    <label class="pill-label"><input type="checkbox" name="homeMembers" value="Male Employer"> <span id="lblMaleEmp">男僱主</span></label>
+                    <label class="pill-label"><input type="checkbox" name="homeMembers" value="Grandma"> <span id="lblGrandma">老太太</span></label>
+                    <label class="pill-label"><input type="checkbox" name="homeMembers" value="Grandpa"> <span id="lblGrandpa">老公公</span></label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label id="lblMainDuties">主要工作 (可多選)</label>
+                <div class="checkbox-grid">
+                    <label class="checkbox-item"><input type="checkbox" name="duties" value="Housework"> <span id="d1">一般家務及清潔</span></label>
+                    <label class="checkbox-item"><input type="checkbox" name="duties" value="Newborn"> <span id="d2">照顧初生嬰兒</span></label>
+                    <label class="checkbox-item"><input type="checkbox" name="duties" value="Children"> <span id="d3">照顧小童</span></label>
+                    <label class="checkbox-item"><input type="checkbox" name="duties" value="Elderly"> <span id="d4">照顧老人</span></label>
+                    <label class="checkbox-item"><input type="checkbox" name="duties" value="Disabled"> <span id="d5">照顧傷殘</span></label>
+                    <label class="checkbox-item"><input type="checkbox" name="duties" value="Machine Wash"> <span id="d6">機洗衣服</span></label>
+                    <label class="checkbox-item"><input type="checkbox" name="duties" value="Hand Wash"> <span id="d7">手洗衣服</span></label>
+                    <label class="checkbox-item"><input type="checkbox" name="duties" value="Ironing"> <span id="d8">燙衫</span></label>
+                    <label class="checkbox-item"><input type="checkbox" name="duties" value="Marketing"> <span id="d9">買餸</span></label>
+                    <label class="checkbox-item"><input type="checkbox" name="duties" value="Cooking"> <span id="d10">煮飯</span></label>
+                    <label class="checkbox-item"><input type="checkbox" name="duties" value="Gardening"> <span id="d11">園藝</span></label>
+                    <label class="checkbox-item"><input type="checkbox" name="duties" value="Wash Car"> <span id="d12">清潔汽車</span></label>
+                    <label class="checkbox-item"><input type="checkbox" name="duties" value="Dog Care"> <span id="d13">照顧狗隻</span></label>
+                    <label class="checkbox-item"><input type="checkbox" name="duties" value="Cat Care"> <span id="d14">照顧貓隻</span></label>
+                </div>
+            </div>
+
+            <div class="btn-container">
+                <button type="button" class="nav-btn btn-prev" id="btnBack5" onclick="nextSection(3)">上一頁</button>
+                <button type="button" class="nav-btn btn-next" id="btnNext5" onclick="nextSection(5)">下一頁</button>
+            </div>
+        </div>
+
+        <!-- STEP 6: Needs Tags -->
+        <div class="form-section" id="section5">
+            <div class="section-title" id="sec6Title">6. 特殊需求標籤 (Needs Tags)</div>
+            <p class="section-desc" id="sec6Desc">請勾選適用於您家庭的招聘標籤，以便我們精準配對：</p>
+
+            <div class="checkbox-grid">
+                <label class="checkbox-item"><input type="checkbox" name="needsTags" value="No Holiday"> No Holiday (買假/無休息日)</label>
+                <label class="checkbox-item"><input type="checkbox" name="needsTags" value="New Born"> New Born (初生嬰兒)</label>
+                <label class="checkbox-item"><input type="checkbox" name="needsTags" value="Toddler"> Toddler (幼兒照顧)</label>
+                <label class="checkbox-item"><input type="checkbox" name="needsTags" value="Elderly"> Elderly (長者照顧)</label>
+                <label class="checkbox-item"><input type="checkbox" name="needsTags" value="Serious Illness"> Serious Illness (重症護理)</label>
+                <label class="checkbox-item"><input type="checkbox" name="needsTags" value="Special Child"> Special Child (特殊兒童)</label>
+                <label class="checkbox-item"><input type="checkbox" name="needsTags" value="Dog Care"> Dog Care (狗隻照料)</label>
+                <label class="checkbox-item"><input type="checkbox" name="needsTags" value="Cat Care"> Cat Care (貓隻照料)</label>
+                <label class="checkbox-item"><input type="checkbox" name="needsTags" value="Wash Car"> Wash Car (洗車)</label>
+                <label class="checkbox-item"><input type="checkbox" name="needsTags" value="Driving"> Driving (駕駛證照)</label>
+                <label class="checkbox-item"><input type="checkbox" name="needsTags" value="Male Helper"> Male Helper (男家傭)</label>
+                <label class="checkbox-item"><input type="checkbox" name="needsTags" value="Male Employer"> Male Employer (單身男僱主)</label>
+                <label class="checkbox-item"><input type="checkbox" name="needsTags" value="No Room"> No Room (無獨立房)</label>
+                <label class="checkbox-item"><input type="checkbox" name="needsTags" value="Own Room"> Own Room (獨立房)</label>
+                <label class="checkbox-item"><input type="checkbox" name="needsTags" value="Share Job"> Share Job (合力分工)</label>
+                <label class="checkbox-item"><input type="checkbox" name="needsTags" value="Good Cook"> Good Cook (精通烹飪)</label>
+            </div>
+
+            <div class="btn-container">
+                <button type="button" class="nav-btn btn-prev" id="btnBack6" onclick="nextSection(4)">上一頁</button>
+                <button type="button" class="nav-btn btn-next" id="btnNext6" onclick="nextSection(6)">下一頁</button>
+            </div>
+        </div>
+
+        <!-- STEP 7: Helper Preferences & App Category -->
+        <div class="form-section" id="section6">
+            <div class="section-title" id="sec7Title">7. 女傭條件偏好與申請類別</div>
+
+            <div class="form-group">
+                <label id="lblAppType">申請類別</label>
+                <div class="pill-group">
+                    <label class="pill-label"><input type="checkbox" name="appType" value="Overseas" checked> <span id="appOverseas">海外引進</span></label>
+                    <label class="pill-label"><input type="checkbox" name="appType" value="Finished Contract"> <span id="appFinished">在港完約</span></label>
+                    <label class="pill-label"><input type="checkbox" name="appType" value="Terminated"> <span id="appTerminated">在港斷約</span></label>
+                    <label class="pill-label"><input type="checkbox" name="appType" value="Renewal"> <span id="appRenewal">續約</span></label>
+                    <label class="pill-label"><input type="checkbox" name="appType" value="Extension"> <span id="appExtension">延長簽證</span></label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label id="lblAcceptedNationality">接納的女傭國籍</label>
+                <div class="pill-group">
+                    <label class="pill-label"><input type="checkbox" name="nationality" value="Filipino" checked> <span id="natPh">菲律賓 (Filipino)</span></label>
+                    <label class="pill-label"><input type="checkbox" name="nationality" value="Indonesian" checked> <span id="natIndo">印尼 (Indonesian)</span></label>
+                    <label class="pill-label"><input type="checkbox" name="nationality" value="Other"> <span id="natOther">其他 (Other)</span></label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label id="lblMaritalPref">偏好婚姻狀況</label>
+                <div class="pill-group">
+                    <label class="pill-label"><input type="checkbox" name="maritalPref" value="Single"> <span id="marSingle">單身</span></label>
+                    <label class="pill-label"><input type="checkbox" name="maritalPref" value="Married"> <span id="marMarried">已婚</span></label>
+                    <label class="pill-label"><input type="checkbox" name="maritalPref" value="No Preference" checked> <span id="marNoPref">無所謂</span></label>
+                </div>
+            </div>
+
+            <div class="btn-container">
+                <button type="button" class="nav-btn btn-prev" id="btnBack7" onclick="nextSection(5)">上一頁</button>
+                <button type="button" class="nav-btn btn-next" id="btnNext7" onclick="nextSection(7)">下一頁</button>
+            </div>
+        </div>
+
+        <!-- STEP 8: Notes & Submission -->
+        <div class="form-section" id="section7">
+            <div class="section-title" id="sec8Title">8. 跟進備註與提交</div>
+
+            <div class="form-group">
+                <label id="lblNotes">跟進備註 / 特別要求 (Follow-up Notes)</label>
+                <textarea id="notes" name="notes" rows="6" placeholder="請填寫其他特別的要求、家傭飲食禁忌或注意事項..."></textarea>
+            </div>
+
+            <div class="btn-container">
+                <button type="button" class="nav-btn btn-prev" id="btnBack8" onclick="nextSection(6)">上一頁</button>
+                <button type="submit" class="nav-btn btn-submit" id="btnSubmit">提交問卷</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Warning Modal (50% completeness gate) -->
+<div class="modal-overlay" id="warnModal">
+    <div class="modal-box">
+        <h3 id="warnTitle">To submit, please fill up at least 50%</h3>
+        <p id="warnMsg"></p>
+        <button type="button" id="warnBtn" onclick="closeWarn()">確定</button>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal-overlay" id="successModal">
+    <div class="modal-box">
+        <h3 id="modalTitle">提交成功！</h3>
+        <p id="modalMsg">非常感謝您填寫 DDHC 僱主招聘需求問卷。<br>我們的專業顧問將會儘快與您聯絡並安排優質家傭配對。</p>
+        <div id="empImportPanel" style="text-align:left;border-top:1px solid #e2e8f0;padding-top:12px;margin-top:14px">
+            <p style="font-size:12px;color:#475569;margin:0 0 6px" id="empImportNote">已自動準備 CRM 記錄，並嘗試開啟 CRM 自動匯入。</p>
+            <textarea id="empImportCode" readonly rows="3" style="width:100%;padding:8px;border:1px solid #cbd5e1;border-radius:8px;font-size:11px;font-family:Consolas,monospace"></textarea>
+            <div style="display:flex;gap:8px;margin-top:8px">
+                <button type="button" onclick="copyEmpCode()" style="flex:1;padding:8px;border-radius:8px;background:#334155;color:#fff;font-size:12px;font-weight:600;border:none">複製匯入碼</button>
+                <button type="button" onclick="openCrmEmp()" style="flex:1;padding:8px;border-radius:8px;background:var(--primary-color);color:#fff;font-size:12px;font-weight:600;border:none">開啟 CRM</button>
+            </div>
+        </div>
+        <button type="button" id="modalBtn" onclick="closeModal()">確定</button>
+    </div>
+</div>
+
+<script>
+    let currentLang = 'zh';
+    let currentSection = 0;
+    const totalSections = 8;
+
+    const translations = {
+        zh: {
+            title: "DDHC 僱主招聘需求問卷",
+            subtitle: "專業家傭配對及招聘服務",
+            langBtn: "🇬🇧 English",
+            sec1Title: "1. 僱主基本資料與稱呼",
+            sec1Desc: "歡迎填寫問卷！請先提供您的基本稱呼與姓名，以便我們為您跟進。",
+            lblSalutation: "稱呼 *",
+            optMr: "先生 (Mr.)",
+            optMs: "小姐 (Ms.)",
+            optMrs: "太太 (Mrs.)",
+            lblName: "姓名 *",
+            lblNickname: "暱稱 / 常用稱呼",
+            sec2Title: "2. 聯絡方式",
+            sec2Desc: "請至少提供一種聯絡方式 (電話 / WhatsApp / Email / 通訊 App)：",
+            lblArea: "居住地區",
+            optHK: "香港",
+            optKLN: "九龍",
+            optNT: "新界",
+            lblPhone: "聯絡電話",
+            lblWhatsapp: "WhatsApp 號碼",
+            lblEmail: "電郵地址 (Email)",
+            lblPreferredApp: "常用通訊 Apps",
+            lblSource: "認識本公司途徑",
+            optSrc1: "朋友介紹",
+            optSrc2: "門市 Walk-in",
+            optSrc3: "Facebook / 社交媒體",
+            optSrc4: "網站搜尋",
+            optSrc5: "舊客戶",
+            sec3Title: "3. 家庭背景與服務人數",
+            lblStartDate: "預計到職日期",
+            lblServiceMembers: "家庭服務人數細節",
+            tdAdult: "成人：",
+            tdInfant: "初生嬰兒：",
+            tdChildren: "小童：",
+            tdElderly: "長者：",
+            tdDisabled: "傷殘/需照顧：",
+            sec4Title: "4. 居住環境",
+            lblFlatSize: "居住面積 (平方呎)",
+            lblBedrooms: "睡房數目",
+            lblMaidRoom: "工人房安排",
+            optRoom1: "獨立工人房 (Flat / House)",
+            optRoom2: "無獨立房，與小孩同住",
+            optRoom3: "無獨立房，設有分隔開的地方",
+            optRoom4: "其他安排",
+            sec5Title: "5. 主要工作與休息日安排",
+            lblOffDay: "每週休息日",
+            optSun: "星期日休息",
+            optSat: "星期六休息",
+            optWkday: "平日休息",
+            optOffOther: "其他",
+            lblHomeMembers: "留在家中人員",
+            lblFemaleEmp: "女僱主",
+            lblMaleEmp: "男僱主",
+            lblGrandma: "老太太",
+            lblGrandpa: "老公公",
+            lblMainDuties: "主要工作 (可多選)",
+            d1: "一般家務及清潔",
+            d2: "照顧初生嬰兒",
+            d3: "照顧小童",
+            d4: "照顧老人",
+            d5: "照顧傷殘",
+            d6: "機洗衣服",
+            d7: "手洗衣服",
+            d8: "燙衫",
+            d9: "買餸",
+            d10: "煮飯",
+            d11: "園藝",
+            d12: "清潔汽車",
+            d13: "照顧狗隻",
+            d14: "照顧貓隻",
+            sec6Title: "6. 特殊需求標籤 (Needs Tags)",
+            sec6Desc: "請勾選適用於您家庭的招聘標籤，以便我們精準配對：",
+            sec7Title: "7. 女傭條件偏好與申請類別",
+            lblAppType: "申請類別",
+            appOverseas: "海外引進",
+            appFinished: "在港完約",
+            appTerminated: "在港斷約",
+            appRenewal: "續約",
+            appExtension: "延長簽證",
+            lblAcceptedNationality: "接納的女傭國籍",
+            natPh: "菲律賓 (Filipino)",
+            natIndo: "印尼 (Indonesian)",
+            natOther: "其他 (Other)",
+            lblMaritalPref: "偏好婚姻狀況",
+            marSingle: "單身",
+            marMarried: "已婚",
+            marNoPref: "無所謂",
+            sec8Title: "8. 跟進備註與提交",
+            lblNotes: "跟進備註 / 特別要求 (Follow-up Notes)",
+            btnBack: "上一頁",
+            btnNext: "下一頁",
+            btnSubmit: "提交問卷",
+            modalTitle: "提交成功！",
+            modalMsg: "非常感謝您填寫 DDHC 僱主招聘需求問卷。<br>我們的專業顧問將會儘快與您聯絡並安排優質家傭配對。",
+            modalBtn: "確定",
+            errNameRequired: "請輸入您的姓名！",
+            errContactRequired: "請至少提供一種聯絡方式 (電話、WhatsApp 或 電郵)！",
+            errCountInvalid: "人數不能是負數或非數字。",
+            fillPctLabel: "已填：",
+            errFill50: "請填寫至少 50% 欄位方可提交",
+            errFill50Sub: "目前已完成 {pct}%（{f} / {t} 個欄位），請再填多啲欄位。",
+            empImportNote: "已自動準備 CRM 記錄，並嘗試開啟 CRM 自動匯入。若彈出視窗被封鎖，可複製匯入碼，再到 CRM 僱主庫貼上。",
+            empCopied: "匯入碼已複製",
+            empCopyFail: "複製失敗，請手動選取匯入碼"
+        },
+        en: {
+            title: "DDHC Employer Requirements Questionnaire",
+            subtitle: "Professional Domestic Helper Matching Services",
+            langBtn: "🇭🇰 繁體中文",
+            sec1Title: "1. Basic Details & Title",
+            sec1Desc: "Welcome! Please provide your name and title so we can assist you better.",
+            lblSalutation: "Salutation *",
+            optMr: "Mr.",
+            optMs: "Ms.",
+            optMrs: "Mrs.",
+            lblName: "Full Name *",
+            lblNickname: "Nickname / Preferred Name",
+            sec2Title: "2. Contact Details",
+            sec2Desc: "Please provide at least one contact method (Phone / WhatsApp / Email / Apps):",
+            lblArea: "Residential Area",
+            optHK: "Hong Kong Island",
+            optKLN: "Kowloon",
+            optNT: "New Territories",
+            lblPhone: "Phone Number",
+            lblWhatsapp: "WhatsApp Number",
+            lblEmail: "Email Address",
+            lblPreferredApp: "Preferred Messaging Apps",
+            lblSource: "How did you hear about us?",
+            optSrc1: "Friend Referral",
+            optSrc2: "Walk-in Branch",
+            optSrc3: "Facebook / Social Media",
+            optSrc4: "Search Engine",
+            optSrc5: "Existing Client",
+            sec3Title: "3. Family Background & Service Members",
+            lblStartDate: "Expected Start Date",
+            lblServiceMembers: "Family Members to Serve",
+            tdAdult: "Adults:",
+            tdInfant: "Infants:",
+            tdChildren: "Children:",
+            tdElderly: "Elderly:",
+            tdDisabled: "Disabled/Needs:",
+            sec4Title: "4. Living Environment",
+            lblFlatSize: "Flat Size (Sq. Ft.)",
+            lblBedrooms: "Number of Bedrooms",
+            lblMaidRoom: "Helper Room Arrangement",
+            optRoom1: "Own Maid Room (Flat / House)",
+            optRoom2: "No own room, share with child",
+            optRoom3: "No own room, separated space provided",
+            optRoom4: "Other arrangement",
+            sec5Title: "5. Main Duties & Day Off",
+            lblOffDay: "Weekly Rest Day",
+            optSun: "Sunday Off",
+            optSat: "Saturday Off",
+            optWkday: "Weekday Off",
+            optOffOther: "Other",
+            lblHomeMembers: "Members Staying at Home",
+            lblFemaleEmp: "Female Employer",
+            lblMaleEmp: "Male Employer",
+            lblGrandma: "Grandmother",
+            lblGrandpa: "Grandfather",
+            lblMainDuties: "Main Duties (Multiple choices)",
+            d1: "General Housework & Cleaning",
+            d2: "Newborn Care",
+            d3: "Child Care",
+            d4: "Elderly Care",
+            d5: "Disabled Care",
+            d6: "Machine Wash Clothes",
+            d7: "Hand Wash Clothes",
+            d8: "Ironing",
+            d9: "Marketing / Grocery",
+            d10: "Cooking",
+            d11: "Gardening",
+            d12: "Car Washing",
+            d13: "Dog Care",
+            d14: "Cat Care",
+            sec6Title: "6. Needs Tags",
+            sec6Desc: "Please check all tags that apply to your recruitment needs:",
+            sec7Title: "7. Helper Preferences & Application Type",
+            lblAppType: "Application Type",
+            appOverseas: "Overseas",
+            appFinished: "Finished Contract",
+            appTerminated: "Terminated Contract",
+            appRenewal: "Renewal",
+            appExtension: "Visa Extension",
+            lblAcceptedNationality: "Accepted Nationality",
+            natPh: "Filipino",
+            natIndo: "Indonesian",
+            natOther: "Other",
+            lblMaritalPref: "Preferred Marital Status",
+            marSingle: "Single",
+            marMarried: "Married",
+            marNoPref: "No Preference",
+            sec8Title: "8. Follow-up Notes & Submission",
+            lblNotes: "Follow-up Notes / Special Requirements",
+            btnBack: "Back",
+            btnNext: "Next Page",
+            btnSubmit: "Submit Form",
+            modalTitle: "Submitted Successfully!",
+            modalMsg: "Thank you for filling out the DDHC Employer Requirements Questionnaire.<br>Our consultants will contact you shortly to arrange helper matching.",
+            modalBtn: "OK",
+            errNameRequired: "Please enter your name!",
+            errContactRequired: "Please provide at least one contact method (Phone, WhatsApp, or Email)!",
+            errCountInvalid: "Counts cannot be negative or non-numeric.",
+            fillPctLabel: "Filled:",
+            errFill50: "To submit, please fill up at least 50%",
+            errFill50Sub: "Currently {pct}% completed ({f} of {t} fields). Please fill in more fields before submitting.",
+            empImportNote: "A CRM record was prepared and we tried to open the CRM to import it automatically. If the popup was blocked, copy the import code and paste it on the CRM Employers tab.",
+            empCopied: "Import code copied",
+            empCopyFail: "Copy failed — please select the code manually"
+        }
+    };
+
+    function toggleLanguage() {
+        currentLang = currentLang === 'zh' ? 'en' : 'zh';
+        const t = translations[currentLang];
+
+        document.getElementById('lblTitle').innerText = t.title;
+        document.getElementById('lblSubtitle').innerText = t.subtitle;
+        document.getElementById('langSwitchBtn').innerText = t.langBtn;
+
+        document.getElementById('sec1Title').innerText = t.sec1Title;
+        document.getElementById('sec1Desc').innerText = t.sec1Desc;
+        document.getElementById('lblSalutation').innerText = t.lblSalutation;
+        document.getElementById('optMr').innerText = t.optMr;
+        document.getElementById('optMs').innerText = t.optMs;
+        document.getElementById('optMrs').innerText = t.optMrs;
+        document.getElementById('lblName').innerText = t.lblName;
+        document.getElementById('lblNickname').innerText = t.lblNickname;
+
+        document.getElementById('sec2Title').innerText = t.sec2Title;
+        document.getElementById('sec2Desc').innerText = t.sec2Desc;
+        document.getElementById('lblArea').innerText = t.lblArea;
+        document.getElementById('optHK').innerText = t.optHK;
+        document.getElementById('optKLN').innerText = t.optKLN;
+        document.getElementById('optNT').innerText = t.optNT;
+        document.getElementById('lblPhone').innerText = t.lblPhone;
+        document.getElementById('lblWhatsapp').innerText = t.lblWhatsapp;
+        document.getElementById('lblEmail').innerText = t.lblEmail;
+        document.getElementById('lblPreferredApp').innerText = t.lblPreferredApp;
+        document.getElementById('lblSource').innerText = t.lblSource;
+        document.getElementById('optSrc1').innerText = t.optSrc1;
+        document.getElementById('optSrc2').innerText = t.optSrc2;
+        document.getElementById('optSrc3').innerText = t.optSrc3;
+        document.getElementById('optSrc4').innerText = t.optSrc4;
+        document.getElementById('optSrc5').innerText = t.optSrc5;
+
+        document.getElementById('sec3Title').innerText = t.sec3Title;
+        document.getElementById('lblStartDate').innerText = t.lblStartDate;
+        document.getElementById('lblServiceMembers').innerText = t.lblServiceMembers;
+        document.getElementById('tdAdult').innerText = t.tdAdult;
+        document.getElementById('tdInfant').innerText = t.tdInfant;
+        document.getElementById('tdChildren').innerText = t.tdChildren;
+        document.getElementById('tdElderly').innerText = t.tdElderly;
+        document.getElementById('tdDisabled').innerText = t.tdDisabled;
+
+        document.getElementById('sec4Title').innerText = t.sec4Title;
+        document.getElementById('lblFlatSize').innerText = t.lblFlatSize;
+        document.getElementById('lblBedrooms').innerText = t.lblBedrooms;
+        document.getElementById('lblMaidRoom').innerText = t.lblMaidRoom;
+        document.getElementById('optRoom1').innerText = t.optRoom1;
+        document.getElementById('optRoom2').innerText = t.optRoom2;
+        document.getElementById('optRoom3').innerText = t.optRoom3;
+        document.getElementById('optRoom4').innerText = t.optRoom4;
+
+        document.getElementById('sec5Title').innerText = t.sec5Title;
+        document.getElementById('lblOffDay').innerText = t.lblOffDay;
+        document.getElementById('optSun').innerText = t.optSun;
+        document.getElementById('optSat').innerText = t.optSat;
+        document.getElementById('optWkday').innerText = t.optWkday;
+        document.getElementById('optOffOther').innerText = t.optOffOther;
+        document.getElementById('lblHomeMembers').innerText = t.lblHomeMembers;
+        document.getElementById('lblFemaleEmp').innerText = t.lblFemaleEmp;
+        document.getElementById('lblMaleEmp').innerText = t.lblMaleEmp;
+        document.getElementById('lblGrandma').innerText = t.lblGrandma;
+        document.getElementById('lblGrandpa').innerText = t.lblGrandpa;
+        document.getElementById('lblMainDuties').innerText = t.lblMainDuties;
+        document.getElementById('d1').innerText = t.d1;
+        document.getElementById('d2').innerText = t.d2;
+        document.getElementById('d3').innerText = t.d3;
+        document.getElementById('d4').innerText = t.d4;
+        document.getElementById('d5').innerText = t.d5;
+        document.getElementById('d6').innerText = t.d6;
+        document.getElementById('d7').innerText = t.d7;
+        document.getElementById('d8').innerText = t.d8;
+        document.getElementById('d9').innerText = t.d9;
+        document.getElementById('d10').innerText = t.d10;
+        document.getElementById('d11').innerText = t.d11;
+        document.getElementById('d12').innerText = t.d12;
+        document.getElementById('d13').innerText = t.d13;
+        document.getElementById('d14').innerText = t.d14;
+
+        document.getElementById('sec6Title').innerText = t.sec6Title;
+        document.getElementById('sec6Desc').innerText = t.sec6Desc;
+
+        document.getElementById('sec7Title').innerText = t.sec7Title;
+        document.getElementById('lblAppType').innerText = t.lblAppType;
+        document.getElementById('appOverseas').innerText = t.appOverseas;
+        document.getElementById('appFinished').innerText = t.appFinished;
+        document.getElementById('appTerminated').innerText = t.appTerminated;
+        document.getElementById('appRenewal').innerText = t.appRenewal;
+        document.getElementById('appExtension').innerText = t.appExtension;
+        document.getElementById('lblAcceptedNationality').innerText = t.lblAcceptedNationality;
+        document.getElementById('natPh').innerText = t.natPh;
+        document.getElementById('natIndo').innerText = t.natIndo;
+        document.getElementById('natOther').innerText = t.natOther;
+        document.getElementById('lblMaritalPref').innerText = t.lblMaritalPref;
+        document.getElementById('marSingle').innerText = t.marSingle;
+        document.getElementById('marMarried').innerText = t.marMarried;
+        document.getElementById('marNoPref').innerText = t.marNoPref;
+
+        document.getElementById('sec8Title').innerText = t.sec8Title;
+        document.getElementById('lblNotes').innerText = t.lblNotes;
+
+        for (let i = 2; i <= 8; i++) {
+            document.getElementById('btnBack' + i).innerText = t.btnBack;
+        }
+        for (let i = 1; i <= 7; i++) {
+            document.getElementById('btnNext' + i).innerText = t.btnNext;
+        }
+        document.getElementById('btnSubmit').innerText = t.btnSubmit;
+        document.getElementById('modalTitle').innerText = t.modalTitle;
+        document.getElementById('modalMsg').innerHTML = t.modalMsg;
+        document.getElementById('modalBtn').innerText = t.modalBtn;
+        document.getElementById('empImportNote').innerText = t.empImportNote;
+        document.getElementById('warnBtn').innerText = t.modalBtn;
+        updateFillPct();
+    }
+
+    /* 婚姻偏好：互斥單選（可全部取消）——避免同時送出「已婚」同「無偏好」 */
+    (function(){
+        var boxes = Array.from(document.querySelectorAll('input[name="maritalPref"]'));
+        boxes.forEach(function(b){
+            b.addEventListener('change', function(){
+                if(b.checked) boxes.forEach(function(o){ if(o !== b) o.checked = false; });
+                updateFillPct();
+            });
+        });
+    })();
+
+    /* 完整度即時更新（輸入即計） */
+    (function(){
+        var qf = document.getElementById('employerForm');
+        if(qf){
+            qf.addEventListener('input', updateFillPct);
+            qf.addEventListener('change', updateFillPct);
+        }
+        updateFillPct();
+    })();
+
+    function updateProgress() {
+        const percent = ((currentSection + 1) / totalSections) * 100;
+        document.getElementById('progressBar').style.width = percent + '%';
+
+        const badges = document.querySelectorAll('.step-badge');
+        badges.forEach((b, idx) => {
+            if (idx === currentSection) {
+                b.classList.add('active');
+            } else {
+                b.classList.remove('active');
+            }
+        });
+    }
+
+    function validateCounts() {
+        const t = translations[currentLang];
+        const cntIds = ['cntAdult','cntInfant','cntChildren','cntElderly','cntDisabled'];
+        for (const id of cntIds) {
+            const el = document.getElementById(id);
+            if (!el) continue;
+            const v = String(el.value || '').trim();
+            if (v !== '' && (isNaN(Number(v)) || Number(v) < 0)) {
+                alert(t.errCountInvalid);
+                el.focus();
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function validateCurrentSection() {
+        const t = translations[currentLang];
+        if (currentSection === 0) {
+            const name = document.getElementById('employerName').value.trim();
+            if (!name) {
+                alert(t.errNameRequired);
+                return false;
+            }
+        } else if (currentSection === 1) {
+            const phone = document.getElementById('phone').value.trim();
+            const whatsapp = document.getElementById('whatsapp').value.trim();
+            const email = document.getElementById('email').value.trim();
+            if (!phone && !whatsapp && !email) {
+                alert(t.errContactRequired);
+                return false;
+            }
+        } else if (currentSection === 2) {
+            if (!validateCounts()) return false;
+        }
+        return true;
+    }
+
+    function nextSection(targetSection) {
+        if (targetSection > currentSection) {
+            if (!validateCurrentSection()) return;
+        }
+
+        document.querySelectorAll('.form-section').forEach(sec => sec.classList.remove('active'));
+        currentSection = targetSection;
+        document.getElementById('section' + currentSection).classList.add('active');
+        updateProgress();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.getElementById('employerForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        /* PRD 流程1：未達 50% 完整度 → 攔截提交並彈窗提示 */
+        var fill = calcCompleteness();
+        if (fill.pct < 50) {
+            var t0 = translations[currentLang];
+            showWarn(t0.errFill50, t0.errFill50Sub
+                .split('{pct}').join(String(fill.pct))
+                .split('{f}').join(String(fill.filled))
+                .split('{t}').join(String(fill.total)));
+            return;
+        }
+        if (!validateCurrentSection()) return;
+        if (!validateCounts()) return;
+        empImportCode = encodePayload(buildEmployerPayload());
+        var ta = document.getElementById('empImportCode'); if (ta) ta.value = empImportCode;
+        try { window.open('ddhc salespro crm v2.5.html#emp=' + encodeURIComponent(empImportCode), '_blank'); } catch(err){}
+        document.getElementById('successModal').classList.add('active');
+    });
+
+    /* ── 完整度計算（PRD 流程1：50% 門檻）──────────────────────────────
+       分母 = 全部可填欄位：input / select / textarea 各算 1 個；
+       radio 同 checkbox 以 name 為一組各算 1 個。分母動態由 DOM 計。      */
+    function getVal(id){ var e=document.getElementById(id); return e ? String(e.value==null?'':e.value).trim() : ''; }
+    function getRadio(name){ var e=document.querySelector('input[name="'+name+'"]:checked'); return e ? e.value : ''; }
+    function getChecks(name){ return Array.from(document.querySelectorAll('input[name="'+name+'"]:checked')).map(function(x){ return x.value; }); }
+    function calcCompleteness(){
+        var root=document.getElementById('employerForm');
+        var singles=[], radios={}, checks={};
+        root.querySelectorAll('input, select, textarea').forEach(function(el){
+            var t=(el.type||'').toLowerCase();
+            if(el.tagName==='SELECT'||el.tagName==='TEXTAREA'){ singles.push(el); return; }
+            if(t==='radio'){ (radios[el.name]=radios[el.name]||[]).push(el); return; }
+            if(t==='checkbox'){ (checks[el.name]=checks[el.name]||[]).push(el); return; }
+            if(t==='hidden'||t==='button'||t==='submit'||t==='reset') return;
+            singles.push(el);
+        });
+        var rk=Object.keys(radios), ck=Object.keys(checks);
+        var total=singles.length+rk.length+ck.length, filled=0;
+        singles.forEach(function(el){ if(String(el.value==null?'':el.value).trim()!=='') filled++; });
+        rk.forEach(function(n){ if(radios[n].some(function(e){return e.checked;})) filled++; });
+        ck.forEach(function(n){ if(checks[n].some(function(e){return e.checked;})) filled++; });
+        return { filled:filled, total:total, pct: total? Math.round(filled*100/total):100 };
+    }
+    function showWarn(title, msg){
+        document.getElementById('warnTitle').textContent=title;
+        document.getElementById('warnMsg').textContent=msg;
+        document.getElementById('warnModal').classList.add('active');
+    }
+    function closeWarn(){ document.getElementById('warnModal').classList.remove('active'); }
+    function updateFillPct(){
+        var el=document.getElementById('fillPercentage'); if(!el) return null;
+        var c=calcCompleteness(), t=translations[currentLang];
+        el.textContent = t.fillPctLabel+' '+c.pct+'%';
+        el.className = 'fill-pct '+(c.pct>=50?'ok':'warn');
+        if(c.pct>=50) document.getElementById('warnModal').classList.remove('active');
+        return c;
+    }
+
+    /* ── 僱主問卷 → CRM 匯入碼 ── */
+    var empImportCode='';
+    function buildEmployerPayload(){
+        return { src:'employer_question', v:1, fields:{
+            salutation:getRadio('salutation'), employerName:getVal('employerName'), nickname:getVal('nickname'),
+            phone:getVal('phone'), whatsapp:getVal('whatsapp'), email:getVal('email'), source:getVal('source'),
+            startDate:getVal('startDate'), area:getRadio('area'),
+            cntAdult:getVal('cntAdult'), descAdult:getVal('descAdult'),
+            cntInfant:getVal('cntInfant'), descInfant:getVal('descInfant'),
+            cntChildren:getVal('cntChildren'), descChildren:getVal('descChildren'),
+            cntElderly:getVal('cntElderly'), descElderly:getVal('descElderly'),
+            cntDisabled:getVal('cntDisabled'), descDisabled:getVal('descDisabled'),
+            flatSize:getVal('flatSize'), bedrooms:getVal('bedrooms'),
+            maidRoom:getRadio('maidRoom'), offDay:getRadio('offDay'),
+            preferredApp:getChecks('preferredApp'), homeMembers:getChecks('homeMembers'),
+            duties:getChecks('duties'), needsTags:getChecks('needsTags'), appType:getChecks('appType'),
+            nationality:getChecks('nationality'), maritalPref:getChecks('maritalPref'),
+            notes:getVal('notes')
+        }};
+    }
+    function encodePayload(p){ return btoa(unescape(encodeURIComponent(JSON.stringify(p)))); }
+    function copyEmpCode(){
+        if(!empImportCode) return;
+        var ta=document.getElementById('empImportCode');
+        try{ ta.focus(); ta.select();
+            if(document.execCommand('copy')) alert(translations[currentLang].empCopied);
+            else alert(translations[currentLang].empCopyFail);
+        }catch(e){ alert(translations[currentLang].empCopyFail); }
+    }
+    function openCrmEmp(){
+        if(!empImportCode) return;
+        window.open('ddhc salespro crm v2.5.html#emp='+encodeURIComponent(empImportCode), '_blank');
+    }
+
+    function closeModal() {
+        document.getElementById('successModal').classList.remove('active');
+    }
+</script>
+
+</body>
+</html>
